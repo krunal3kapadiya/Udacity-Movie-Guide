@@ -1,16 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/action_search"
+        android:icon="@drawable/ic_search_white_24dp"
+        android:title="@string/search"
+        app:showAsAction="always"
+        app:actionViewClass="android.support.v7.widget.SearchView"/>
 
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/action_sort_pop"
             android:checked="true"
-            android:title="@string/action_most_popular" />
+            android:title="@string/action_most_popular"/>
         <item
             android:id="@+id/action_sort_rate"
-            android:title="@string/action_highest_rated" />
+            android:title="@string/action_highest_rated"/>
         <item
             android:id="@+id/action_favorite"
-            android:title="@string/action_favorite" />
+            android:title="@string/action_favorite"/>
     </group>
 </menu>
