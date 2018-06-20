@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">Popular Movies</string>
+    <string name="title_activity_movie_detail">MovieDetail</string>
+    <string name="action_most_popular">Most Popular</string>
+    <string name="action_highest_rated">Highest Rated</string>
+    <string name="internet_not_available">Internet is not available</string>
+    <string name="action_favorite">Favorite Movies</string>
+    <string name="overview">Overview</string>
+    <string name="trailer">Trailer</string>
+    <string name="reviews">Reviews</string>
+    <string name="retry">Retry</string>
+    <string name="youtube_image">https://img.youtube.com/vi/%s/mqdefault.jpg</string>
+    <string name="youtube_video">http://www.youtube.com/watch?v=%s</string>
+</resources>
