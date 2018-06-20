@@ -1,5 +1,5 @@
-# Popular-Movies
-  <img src="/screenshots/graphic.png"/>
+# Popular-Movies <a href="https://play.google.com/store/apps/details?id=com.krunal3kapadiya.popularmovies"><img src="/screenshots/playstore.svg" width="100"></a>
+  <a href="https://play.google.com/store/apps/details?id=com.krunal3kapadiya.popularmovies"><img src="/screenshots/graphic.png"/></a>
   
  ## Used Libraries
  
@@ -8,7 +8,7 @@
  - [Picasso](http://square.github.io/picasso/)
  - [Stetho](http://facebook.github.io/stetho/)
  
- ## Screens
+ ## Screens 
  
  |Home screen|Movie Detail|
  |:---:|:---:|
