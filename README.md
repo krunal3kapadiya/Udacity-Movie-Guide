@@ -8,6 +8,12 @@
  - [Picasso](http://square.github.io/picasso/)
  - [Stetho](http://facebook.github.io/stetho/)
  
+ ## Screens
+ 
+ |Home screen|Movie Detail|
+ |:---:|:---:|
+ |![homescreen.webp](/screenshots/1.webp)|![moviedetail.webp](/screenshots/2.webp)|
+ 
  ## How to contribute?
  - Check out contribution :point_right: [Guidelines](./CONTRIBUTING.md)  
  
