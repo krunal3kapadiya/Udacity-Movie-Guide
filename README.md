@@ -1,9 +1,7 @@
 # Popular-Movies
-Popular Movies with TMDB api
- 
+  <img src="/screenshots/graphic.png"/>
+  
  ## Used Libraries
- 
- <img src="/screenshots/graphic.png"/>
  
  - [Retrofit](https://developer.android.com/topic/libraries/support-library/index.html)
  - [OkHttp](http://square.github.io/okhttp/)
