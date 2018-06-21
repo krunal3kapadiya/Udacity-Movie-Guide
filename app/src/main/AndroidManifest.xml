@@ -24,6 +24,10 @@
             android:label="@string/title_activity_movie_detail"
             android:theme="@style/AppTheme.NoActionBar" />
 
+        <activity
+            android:name=".dashBoard.DashBoardActivity"
+            android:label="@string/app_name" />
+
         <provider
             android:name=".data.MovieProvider"
             android:authorities="com.krunal3kapadiya.popularmovies.data.MovieProvider"

@@ -28,8 +28,8 @@ class MovieRVAdapter(private val mContext: Context, private val mMovieArrayList:
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind(mMovieArrayList)
-//        ViewCompat.setTransitionName(holder.itemView, mMovieArrayList[position].name)
-//        setFadeAnimation(holder.itemView)
+        ViewCompat.setTransitionName(holder.itemView, mMovieArrayList[position].name)
+        setFadeAnimation(holder.itemView)
     }
 
     private fun setFadeAnimation(view: View) {

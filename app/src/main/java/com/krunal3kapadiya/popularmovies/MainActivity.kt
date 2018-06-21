@@ -21,6 +21,7 @@ import android.widget.ImageView
 import android.widget.Toast
 import butterknife.ButterKnife
 import com.facebook.stetho.Stetho
+import com.krunal3kapadiya.popularmovies.dashBoard.DashBoardActivity
 import com.krunal3kapadiya.popularmovies.data.MovieContract
 import com.krunal3kapadiya.popularmovies.data.adapter.MovieRVAdapter
 import com.krunal3kapadiya.popularmovies.data.api.MovieApiClient
@@ -44,6 +45,9 @@ class MainActivity : AppCompatActivity(), MovieRVAdapter.OnItemClick, SearchView
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        DashBoardActivity.launch(this)
+
         ButterKnife.bind(this)
         mContext = this@MainActivity
 

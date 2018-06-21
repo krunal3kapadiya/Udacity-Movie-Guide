@@ -12,4 +12,7 @@
     <string name="youtube_image">https://img.youtube.com/vi/%s/mqdefault.jpg</string>
     <string name="youtube_video">http://www.youtube.com/watch?v=%s</string>
     <string name="search">Search</string>
+    <string name="title_movies_fragment">Movies</string>
+    <string name="title_tv_fragment">TV</string>
+    <string name="title_actors_fragment">Actors</string>
 </resources>
