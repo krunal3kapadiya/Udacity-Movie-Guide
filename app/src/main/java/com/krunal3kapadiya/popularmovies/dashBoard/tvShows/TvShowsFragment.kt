@@ -27,10 +27,10 @@ class TvShowsFragment : Fragment() {
 
         val adapter = TabFragmentAdapter(activity!!.supportFragmentManager)
 
-        adapter.addFragment(NowPlayingFragment.newInstance(), "Airing Today")
+        /*adapter.addFragment(NowPlayingFragment.newInstance(), "Airing Today")
         adapter.addFragment(NowPlayingFragment.newInstance(), "On the Air")
         adapter.addFragment(NowPlayingFragment.newInstance(), "Popular")
-        adapter.addFragment(NowPlayingFragment.newInstance(), "Top Rated")
+        adapter.addFragment(NowPlayingFragment.newInstance(), "Top Rated")*/
 
         moviesViewPager.adapter = adapter
 

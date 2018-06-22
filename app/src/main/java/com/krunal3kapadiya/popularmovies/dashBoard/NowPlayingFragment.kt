@@ -1,5 +1,6 @@
 package com.krunal3kapadiya.popularmovies.dashBoard
 
+import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.content.res.Configuration
 import android.os.Bundle
@@ -12,19 +13,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.Toast
-import com.krunal3kapadiya.popularmovies.Constants
 import com.krunal3kapadiya.popularmovies.MovieDetailActivity
 import com.krunal3kapadiya.popularmovies.R
+import com.krunal3kapadiya.popularmovies.dashBoard.movies.MoviesViewModel
 import com.krunal3kapadiya.popularmovies.data.adapter.MovieRVAdapter
-import com.krunal3kapadiya.popularmovies.data.api.MovieApiClient
-import com.krunal3kapadiya.popularmovies.data.api.MovieApiInterface
-import com.krunal3kapadiya.popularmovies.data.model.MovieResponse
 import com.krunal3kapadiya.popularmovies.data.model.Movies
+import kotlinx.android.synthetic.main.fragment_movies.*
 import kotlinx.android.synthetic.main.fragment_now_playing.*
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 import java.util.*
 
 class NowPlayingFragment : Fragment(), MovieRVAdapter.OnItemClick {
@@ -44,8 +39,12 @@ class NowPlayingFragment : Fragment(), MovieRVAdapter.OnItemClick {
     }
 
     companion object {
-        fun newInstance(): NowPlayingFragment {
-            return NowPlayingFragment()
+        fun newInstance(number:Int): NowPlayingFragment {
+            val fragment = NowPlayingFragment()
+            val bundle = Bundle()
+            bundle.putInt("Number",number)
+            fragment.arguments = bundle
+            return fragment
         }
     }
 
@@ -71,9 +70,21 @@ class NowPlayingFragment : Fragment(), MovieRVAdapter.OnItemClick {
         rv_list_movie_main!!.layoutManager = layoutManager
         mAdapter = MovieRVAdapter(context!!, mMoviesArrayList!!)
         rv_list_movie_main!!.adapter = mAdapter
+        val moviesViewModel = ViewModelProviders.of(this).get(MoviesViewModel::class.java)
+        val number = arguments?.getInt("Number")
+        moviesViewModel.getPopularMovieList(number)
+        moviesViewModel.errorMessage.observe(this, android.arch.lifecycle.Observer {
+            displayNetworkDisableError(moviesTab, View.OnClickListener { moviesViewModel.getPopularMovieList(number) })
+        })
 
-        getMovieListPop()
+        moviesViewModel.movieArrayList.observe(this, android.arch.lifecycle.Observer {
+            mAdapter!!.setData(it)
+        })
     }
 
-
+    fun displayNetworkDisableError(view: View?, listener: View.OnClickListener) {
+        val snackbar = Snackbar.make(view!!, R.string.internet_not_available, Snackbar.LENGTH_INDEFINITE)
+                .setAction(R.string.retry, listener)
+        snackbar.show()
+    }
 }

@@ -28,19 +28,29 @@ class MovieRVAdapter(private val mContext: Context, private val mMovieArrayList:
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind(mMovieArrayList)
-        ViewCompat.setTransitionName(holder.itemView, mMovieArrayList[position].name)
-        setFadeAnimation(holder.itemView)
+//        ViewCompat.setTransitionName(holder.itemView, mMovieArrayList[position].name)
+//        setFadeAnimation(holder.itemView)
     }
 
-    private fun setFadeAnimation(view: View) {
+    /*private fun setFadeAnimation(view: View) {
         val anim = AlphaAnimation(0.0f, 1.0f)
         anim.duration = 1000
         view.startAnimation(anim)
-    }
+    }*/
 
 
     override fun getItemCount(): Int {
         return mMovieArrayList.size
+    }
+
+    fun setData(it: ArrayList<Movies>?) {
+        mMovieArrayList.clear()
+        if (it != null) {
+            for (movies in it) {
+                mMovieArrayList.add(movies)
+            }
+        }
+        notifyDataSetChanged()
     }
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

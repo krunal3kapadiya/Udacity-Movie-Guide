@@ -1,6 +1,9 @@
 package com.krunal3kapadiya.popularmovies.dashBoard.movies
 
+import android.arch.lifecycle.Observer
+import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
+import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -27,11 +30,11 @@ class MoviesFragment : Fragment() {
 
         val adapter = TabFragmentAdapter(activity!!.supportFragmentManager)
 
-        adapter.addFragment(NowPlayingFragment.newInstance(), "Now Playing")
-        adapter.addFragment(NowPlayingFragment.newInstance(), "Popular")
-        adapter.addFragment(NowPlayingFragment.newInstance(), "Upcoming")
-        adapter.addFragment(NowPlayingFragment.newInstance(), "Top Rated")
-        adapter.addFragment(NowPlayingFragment.newInstance(), "Movies by the year")
+        adapter.addFragment(NowPlayingFragment.newInstance(1), "Now Playing")
+        adapter.addFragment(NowPlayingFragment.newInstance(2), "Popular")
+        adapter.addFragment(NowPlayingFragment.newInstance(3), "Upcoming")
+        adapter.addFragment(NowPlayingFragment.newInstance(4), "Top Rated")
+        adapter.addFragment(NowPlayingFragment.newInstance(5), "Movies by the year")
 
         moviesViewPager.adapter = adapter
 

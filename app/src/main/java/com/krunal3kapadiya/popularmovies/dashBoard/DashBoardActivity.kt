@@ -18,7 +18,10 @@ import com.krunal3kapadiya.popularmovies.dashBoard.tvShows.TvShowsFragment
 import com.krunal3kapadiya.popularmovies.data.adapter.MovieRVAdapter
 import kotlinx.android.synthetic.main.activity_dashboard.*
 
-class DashBoardActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
+class DashBoardActivity : AppCompatActivity(), MovieRVAdapter.OnItemClick, SearchView.OnQueryTextListener {
+    override fun onItemClick(pos: Int, view: ImageView?) {
+
+    }
 
     companion object {
         fun launch(context: Context) {
