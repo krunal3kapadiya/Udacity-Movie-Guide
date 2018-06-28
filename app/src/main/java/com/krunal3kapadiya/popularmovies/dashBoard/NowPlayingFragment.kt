@@ -5,9 +5,7 @@ import android.content.Intent
 import android.content.res.Configuration
 import android.os.Bundle
 import android.support.design.widget.Snackbar
-import android.support.v4.app.ActivityOptionsCompat
 import android.support.v4.app.Fragment
-import android.support.v4.view.ViewCompat
 import android.support.v7.widget.GridLayoutManager
 import android.view.LayoutInflater
 import android.view.View
@@ -27,15 +25,15 @@ class NowPlayingFragment : Fragment(), MovieRVAdapter.OnItemClick {
         val intent = Intent(context, MovieDetailActivity::class.java)
         intent.putExtra(MovieDetailActivity.ARG_MOVIE, mMoviesArrayList!![pos])
 
-        val options = view?.let {
-            ActivityOptionsCompat.makeSceneTransitionAnimation(
-                    activity!!,
-                    it,
-                    ViewCompat.getTransitionName(view))
-        }
+//        val options = view?.let {
+//            ActivityOptionsCompat.makeSceneTransitionAnimation(
+//                    activity!!,
+//                    it,
+//                    ViewCompat.getTransitionName(view))
+//        }
+//
 
-
-        startActivity(intent, options?.toBundle())
+        startActivity(intent)
     }
 
     companion object {

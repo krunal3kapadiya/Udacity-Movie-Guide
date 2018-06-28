@@ -10,6 +10,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
+import android.support.v4.content.ContextCompat.startActivity
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.graphics.Palette
@@ -20,23 +21,25 @@ import android.view.MenuItem
 import android.view.View
 import android.view.WindowManager
 import android.widget.Toast
-import butterknife.ButterKnife
-import com.krunal3kapadiya.popularmovies.data.MovieContract
+import com.krunal3kapadiya.popularmovies.R.id.card_movie_review
 import com.krunal3kapadiya.popularmovies.data.adapter.ReviewRVAdapter
 import com.krunal3kapadiya.popularmovies.data.adapter.TrailerRVAdapter
 import com.krunal3kapadiya.popularmovies.data.api.MovieApiClient
-import com.krunal3kapadiya.popularmovies.data.api.MovieApiInterface
+import com.krunal3kapadiya.popularmovies.data.api.MovieApi
 import com.krunal3kapadiya.popularmovies.data.model.*
 import com.squareup.picasso.Picasso
 import com.squareup.picasso.Target
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_movie_detail.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.util.*
 import java.util.regex.Pattern
+import kotlin.collections.ArrayList
 
-class MovieDetailActivity : AppCompatActivity(), TrailerRVAdapter.OnItemClick, ReviewRVAdapter.OnReviewItemClick {
+class MovieDetailActivity(private var isFavorite: Boolean = false) : AppCompatActivity(), TrailerRVAdapter.OnItemClick, ReviewRVAdapter.OnReviewItemClick {
 
     private var mContext: Context? = null
     private var movieId: Long = 0
@@ -48,8 +51,6 @@ class MovieDetailActivity : AppCompatActivity(), TrailerRVAdapter.OnItemClick, R
     private var themeLightColor: Int = 0
     private var themeDarkColor: Int = 0
     private var mBitmap: Bitmap? = null
-
-    internal var isFavorite = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -87,7 +88,6 @@ class MovieDetailActivity : AppCompatActivity(), TrailerRVAdapter.OnItemClick, R
 
 
         setContentView(R.layout.activity_movie_detail)
-        ButterKnife.bind(this)
 
         setSupportActionBar(toolbar)
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
@@ -146,39 +146,13 @@ class MovieDetailActivity : AppCompatActivity(), TrailerRVAdapter.OnItemClick, R
         getTrailerList()
 
 
-        val cursor = contentResolver.query(MovieContract.MovieEntry.CONTENT_URI,
-                null,
-                MovieContract.MovieEntry.COLUMN_MOVIE_ID + " = ?",
-                arrayOf(movieItem.id.toString()), null)
-
-        val numRows = cursor!!.count
-        cursor.close()
-        isFavorite = numRows == 1
-
-
-        Log.i("MovieList", "" + numRows)
-
-
         favorite_button!!.setOnClickListener {
             if (isFavorite) {
                 favorite_button!!.setImageResource(R.mipmap.ic_favorite_white)
-                contentResolver
-                        .delete(MovieContract.MovieEntry.CONTENT_URI
-                                .buildUpon()
-                                .appendPath(movieItem.id.toString())
-                                .build(), null, null)
                 isFavorite = false
             } else {
                 favorite_button!!.setImageResource(R.mipmap.ic_favorite_white_selected)
                 val contentValues = ContentValues()
-                contentValues.put(MovieContract.MovieEntry.COLUMN_MOVIE_ID, movieItem.id)
-                contentValues.put(MovieContract.MovieEntry.COLUMN_TITLE, movieItem.name)
-                contentValues.put(MovieContract.MovieEntry.COLUMN_POSTER, movieItem.url)
-                contentValues.put(MovieContract.MovieEntry.COLUMN_BACKDROP, movieItem.backDropPath)
-                contentValues.put(MovieContract.MovieEntry.COLUMN_OVERVIEW, movieItem.overView)
-                contentValues.put(MovieContract.MovieEntry.COLUMN_RATINGS, movieItem.rating)
-                contentValues.put(MovieContract.MovieEntry.COLUMN_RELEASE_DATE, movieItem.releaseDate)
-                contentResolver.insert(MovieContract.MovieEntry.CONTENT_URI, contentValues)
                 isFavorite = true
             }
         }
@@ -198,19 +172,16 @@ class MovieDetailActivity : AppCompatActivity(), TrailerRVAdapter.OnItemClick, R
 
     private fun getTrailerList() {
         val movieApiInterface = MovieApiClient.client!!
-                .create(MovieApiInterface::class.java)
+                .create(MovieApi::class.java)
         val getTrailers = movieApiInterface.getMovieTrailers(movieId, Constants.API_KEY)
-        getTrailers.enqueue(object : Callback<TrailerResponse> {
-            override fun onResponse(call: Call<TrailerResponse>, response: Response<TrailerResponse>) {
-                mTrailerList!!.clear()
-                response.body()!!.trailerArrayList?.let { mTrailerList!!.addAll(it) }
-                mTrailerAdapter!!.notifyDataSetChanged()
+        getTrailers.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
+                    mTrailerList!!.clear()
+                    (mTrailerList as ArrayList).addAll(it.trailerArrayList!!)
+                    mTrailerAdapter!!.notifyDataSetChanged()
 
-                card_movie_trailer!!.visibility = View.VISIBLE
-            }
-
-            override fun onFailure(call: Call<TrailerResponse>, t: Throwable) {}
-        })
+                    card_movie_trailer!!.visibility = View.VISIBLE
+                }, {})
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -225,20 +196,18 @@ class MovieDetailActivity : AppCompatActivity(), TrailerRVAdapter.OnItemClick, R
 
     fun getReviewList() {
         val movieApiInterface = MovieApiClient.client!!
-                .create(MovieApiInterface::class.java)
+                .create(MovieApi::class.java)
         val getReview = movieApiInterface.getMovieReviews(movieId, Constants.API_KEY)
-        getReview.enqueue(object : Callback<ReviewsResponse> {
-            override fun onResponse(call: Call<ReviewsResponse>, response: Response<ReviewsResponse>) {
-                response.body()!!.reviewsArrayList?.let { mReviewList!!.addAll(it) }
-                mReviewAdapter!!.notifyDataSetChanged()
+        getReview.observeOn(Schedulers.io())
+                .subscribeOn(AndroidSchedulers.mainThread())
+                .subscribe({
+                    it!!.reviewsArrayList.let { (mReviewList as ArrayList).addAll(it!!) }
+                    mReviewAdapter!!.notifyDataSetChanged()
 
-                card_movie_review!!.visibility = View.VISIBLE
-            }
+                    card_movie_review!!.visibility = View.VISIBLE
+                }, {
 
-            override fun onFailure(call: Call<ReviewsResponse>, t: Throwable) {
-                Toast.makeText(mContext, "Error occured Review List ", Toast.LENGTH_SHORT).show()
-            }
-        })
+                })
     }
 
     override fun onItemClick(position: Int) {

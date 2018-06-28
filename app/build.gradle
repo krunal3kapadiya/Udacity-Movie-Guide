@@ -11,30 +11,32 @@ repositories {
     maven { url 'https://maven.fabric.io/public' }
 }
 apply plugin: 'com.android.application'
+
 apply plugin: 'io.fabric'
 
 apply plugin: 'kotlin-android'
+
 apply plugin: 'kotlin-android-extensions'
+
 apply plugin: 'kotlin-kapt'
-apply from: '../gradle/config.gradle'
-apply from: '../gradle/deps.gradle'
 
 android {
-    compileSdkVersion buidlConfig.compile
+
+    compileSdkVersion versions.compileSdk
     compileOptions {
-        sourceCompatibility javaCompatibility.sourceCompatibility
-        targetCompatibility javaCompatibility.targetCompatibility
+        sourceCompatibility versions.sourceCompat
+        targetCompatibility versions.targetCompat
     }
     defaultConfig {
-        applicationId buidlConfig.applicationId
+        applicationId "com.krunal3kapadiya.popularmovies"
         android.defaultConfig.vectorDrawables.useSupportLibrary true
         //sdks
-        minSdkVersion buidlConfig.min
-        targetSdkVersion buidlConfig.target
+        minSdkVersion versions.minSdk
+        targetSdkVersion versions.compileSdk
 
         //Version config
-        versionCode versionConfig.versionCode
-        versionName versionConfig.versionName
+        versionCode 1
+        versionName "1.2"
         multiDexEnabled true
 
         //strip other than english resources
@@ -46,11 +48,7 @@ android {
             }
         }
     }
-    packagingOptions packageExcludes
-    lintOptions lintOption
-    aaptOptions aaptOption
-    dexOptions dexOption
-    kapt kaptOption
+
     buildTypes {
         debug {
         }
@@ -62,56 +60,43 @@ android {
 
 dependencies {
     implementation 'com.squareup.picasso:picasso:2.5.2'
-    implementation ide.kotlin
-    implementation ide.constrainlayout
+    implementation deps.kotlin.stdlib
+    implementation deps.support.constraint
     implementation 'com.android.support:palette-v7:26.0.0-alpha1'
 
-    implementation playServiceLib.auth
-    //Butterknife
-    implementation butterKnifeLib.butterKnife
-    annotationProcessor butterKnifeLib.annotationProcessor
-    kapt butterKnifeLib.annotationProcessor
-
     //Other lib
-    implementation otherLib.gson
-    implementation(otherLib.timber, excludeGrp)
-    implementation(otherLib.glide, excludeGrp)
-    implementation(otherLib.circleImagView, excludeGrp)
-    implementation(otherLib.facebook, excludeGrp)
-    debugImplementation(otherLib.shetho, excludeGrp)
-    debugImplementation(otherLib.shethoOkhttp, excludeGrp)
+    api deps.support.appCompat
+    api deps.support.recyclerView
+    api deps.support.cardView
+    api deps.support.support
+    api deps.support.designSupport
 
-    //Retrofit
-    implementation retrofitLib.retrofit
-    implementation retrofitLib.gsonPlugin
-    implementation retrofitLib.rxPlugin
-    implementation retrofitLib.logger
+    api deps.android.lifecycleExt
+    api deps.android.lifecycleCommon
+    api deps.android.roomRuntime
+    api deps.android.roomRx
 
-    //Support
-    implementation supportLib.appCompat
-    implementation supportLib.supportv4
-    implementation supportLib.recyclerView
-    implementation supportLib.cardView
-    implementation supportLib.design
-    implementation supportLib.multidex
-    implementation supportLib.preference
+    api deps.kotlin.stdlib
 
-    //Arch component
-    implementation(archComponent.lifeCycle, excludeGrp)
-    implementation(archComponent.viewModel, excludeGrp)
-    implementation(archComponent.room, excludeGrp)
-    implementation(archComponent.roomRx, excludeGrp)
+    api deps.reactivex.rxJava
+    api deps.reactivex.rxAndroid
 
-    annotationProcessor archComponent.roomAnnotation
-    annotationProcessor archComponent.lifeCycleAnnotation
+    api deps.google.dagger
+    kapt deps.google.daggerProcessor
+    api deps.google.gson
 
-    kapt archComponent.lifeCycleAnnotation
-    kapt archComponent.roomAnnotation
+    api deps.square.picasso
+    api deps.square.okhttpDownloader
 
-    //Rx
-    implementation rxLib.rxJava
-    implementation rxLib.rxAndroid
-    implementation rxLib.rxBus
+    api deps.square.retrofit
+    api deps.square.okhttp
+    api deps.square.gsonConverter
+    api deps.square.retrofitRxAdapter
+
+    api deps.additional.jodaTime
+
+    api deps.facebook.stetho
+    api deps.facebook.networkInterceptor
     implementation('com.crashlytics.sdk.android:crashlytics:2.8.0@aar') {
         transitive = true
     }

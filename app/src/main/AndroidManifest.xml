@@ -11,7 +11,7 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+        <activity android:name=".dashBoard.DashBoardActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -24,17 +24,8 @@
             android:label="@string/title_activity_movie_detail"
             android:theme="@style/AppTheme.NoActionBar" />
 
-        <activity
-            android:name=".dashBoard.DashBoardActivity"
-            android:label="@string/app_name" />
-
-        <provider
-            android:name=".data.MovieProvider"
-            android:authorities="com.krunal3kapadiya.popularmovies.data.MovieProvider"
-            android:exported="false"
-            android:syncable="true" />
         <meta-data
             android:name="io.fabric.ApiKey"
-            android:value="[FABRIC_KEY]" />
+            android:value="442d97869312f0d19f6b3b6e434013073d3e838d" />
     </application>
 </manifest>

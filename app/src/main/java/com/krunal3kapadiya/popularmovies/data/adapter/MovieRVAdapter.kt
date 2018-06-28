@@ -14,19 +14,31 @@ import com.krunal3kapadiya.popularmovies.data.model.Movies
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.row_movies.view.*
 
-class MovieRVAdapter(private val mContext: Context, private val mMovieArrayList: ArrayList<Movies>) : RecyclerView.Adapter<MovieRVAdapter.ViewHolder>() {
+class MovieRVAdapter(
+        private val mContext: Context,
+        private val mMovieArrayList: ArrayList<Movies>
+) : RecyclerView.Adapter<MovieRVAdapter.ViewHolder>() {
     private val mOnItemClick: OnItemClick
 
     init {
         mOnItemClick = mContext as OnItemClick
+        setHasStableIds(true)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.row_movies, parent, false)
+        val view = LayoutInflater.from(parent.context)
+                .inflate(
+                        R.layout.row_movies,
+                        parent,
+                        false
+                )
         return ViewHolder(view)
     }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+    override fun onBindViewHolder(
+            holder: ViewHolder,
+            position: Int
+    ) {
         holder.bind(mMovieArrayList)
 //        ViewCompat.setTransitionName(holder.itemView, mMovieArrayList[position].name)
 //        setFadeAnimation(holder.itemView)
@@ -43,6 +55,15 @@ class MovieRVAdapter(private val mContext: Context, private val mMovieArrayList:
         return mMovieArrayList.size
     }
 
+    /*override fun getItemId(position: Int): Long {
+            return position
+    }*/
+
+    override fun getItemViewType(position: Int): Int {
+        return position
+    }
+
+
     fun setData(it: ArrayList<Movies>?) {
         mMovieArrayList.clear()
         if (it != null) {
@@ -58,7 +79,7 @@ class MovieRVAdapter(private val mContext: Context, private val mMovieArrayList:
             with(mMovieArrayList) {
                 Picasso.with(mContext)
                         .load(Constants.BASE_IMAGE_URL + Constants.POSTER_SIZE + mMovieArrayList[position].url)
-                        .placeholder(R.mipmap.ic_movie)
+//                        .placeholder(R.mipmap.ic_movie)
                         .into(itemView.img_movie_row)
 
                 itemView.img_movie_row.setOnClickListener { mOnItemClick.onItemClick(adapterPosition, itemView.img_movie_row) }

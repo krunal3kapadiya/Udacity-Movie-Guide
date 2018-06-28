@@ -4,9 +4,13 @@ import android.arch.lifecycle.MediatorLiveData
 import android.arch.lifecycle.ViewModel
 import com.krunal3kapadiya.popularmovies.Constants
 import com.krunal3kapadiya.popularmovies.data.api.MovieApiClient
-import com.krunal3kapadiya.popularmovies.data.api.MovieApiInterface
+import com.krunal3kapadiya.popularmovies.data.api.MovieApi
 import com.krunal3kapadiya.popularmovies.data.model.MovieResponse
 import com.krunal3kapadiya.popularmovies.data.model.Movies
+import io.reactivex.Observable
+import io.reactivex.Scheduler
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -19,8 +23,8 @@ class MoviesViewModel : ViewModel() {
 
     fun getPopularMovieList(number: Int?) {
         val movieClient = MovieApiClient.client!!
-                .create(MovieApiInterface::class.java)
-        var getPopMovie: Call<MovieResponse>? = null
+                .create(MovieApi::class.java)
+        var getPopMovie: Observable<MovieResponse>? = null
         when (number) {
             1 -> {
                 getPopMovie = movieClient.getNowPlayingMovies(Constants.API_KEY)
@@ -40,12 +44,9 @@ class MoviesViewModel : ViewModel() {
 
         }
 
-        getPopMovie?.enqueue(object : Callback<MovieResponse> {
-            override fun onResponse(call: Call<MovieResponse>, response: Response<MovieResponse>) {
-                response.body()!!.results?.let { movieArrayList.postValue(it) }
-            }
-
-            override fun onFailure(call: Call<MovieResponse>, t: Throwable) {}
-        })
+        getPopMovie?.observeOn(Schedulers.io())?.observeOn(AndroidSchedulers.mainThread())
+                ?.subscribe({
+                    it.results?.let { movieArrayList.postValue(it) }
+                }, {})
     }
 }
