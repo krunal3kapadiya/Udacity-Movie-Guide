@@ -50,12 +50,22 @@ android {
     }
 
     buildTypes {
+        applicationVariants.all { variant ->
+            variant.buildConfigField "String", "TMDB_API_KEY", "\""+getApiKey()+"\""
+        }
+
         debug {
         }
         release {
         }
     }
     buildToolsVersion '27.0.3'
+}
+
+static def getApiKey(){
+    def Properties props = new Properties()
+    props.load(new FileInputStream(new File('secrets.properties')))
+    return props['TMDB_API_KEY']
 }
 
 dependencies {

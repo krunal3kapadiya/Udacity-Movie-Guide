@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.krunal3kapadiya.popularmovies.R
-import com.krunal3kapadiya.popularmovies.dashBoard.NowPlayingFragment
 import com.krunal3kapadiya.popularmovies.dashBoard.TabFragmentAdapter
 import kotlinx.android.synthetic.main.fragment_movies.*
 
@@ -27,10 +26,10 @@ class TvShowsFragment : Fragment() {
 
         val adapter = TabFragmentAdapter(activity!!.supportFragmentManager)
 
-        /*adapter.addFragment(NowPlayingFragment.newInstance(), "Airing Today")
-        adapter.addFragment(NowPlayingFragment.newInstance(), "On the Air")
-        adapter.addFragment(NowPlayingFragment.newInstance(), "Popular")
-        adapter.addFragment(NowPlayingFragment.newInstance(), "Top Rated")*/
+        adapter.addFragment(TvListingFragment.newInstance(1), "Airing Today")
+        adapter.addFragment(TvListingFragment.newInstance(2), "On the Air")
+        adapter.addFragment(TvListingFragment.newInstance(3), "Popular")
+        adapter.addFragment(TvListingFragment.newInstance(4), "Top Rated")
 
         moviesViewPager.adapter = adapter
 
