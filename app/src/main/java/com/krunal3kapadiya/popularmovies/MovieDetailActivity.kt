@@ -173,7 +173,10 @@ class MovieDetailActivity(private var isFavorite: Boolean = false) : AppCompatAc
     private fun getTrailerList() {
         val movieApiInterface = MovieApiClient.client!!
                 .create(MovieApi::class.java)
-        val getTrailers = movieApiInterface.getMovieTrailers(movieId, Constants.API_KEY)
+        val getTrailers = movieApiInterface.getMovieTrailers(
+                movieId,
+                BuildConfig.TMDB_API_KEY
+        )
         getTrailers.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
                     mTrailerList!!.clear()
@@ -197,7 +200,10 @@ class MovieDetailActivity(private var isFavorite: Boolean = false) : AppCompatAc
     fun getReviewList() {
         val movieApiInterface = MovieApiClient.client!!
                 .create(MovieApi::class.java)
-        val getReview = movieApiInterface.getMovieReviews(movieId, Constants.API_KEY)
+        val getReview = movieApiInterface.getMovieReviews(
+                movieId,
+                BuildConfig.TMDB_API_KEY
+        )
         getReview.observeOn(Schedulers.io())
                 .subscribeOn(AndroidSchedulers.mainThread())
                 .subscribe({

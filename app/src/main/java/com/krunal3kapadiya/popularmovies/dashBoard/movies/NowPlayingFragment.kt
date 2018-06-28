@@ -1,4 +1,4 @@
-package com.krunal3kapadiya.popularmovies.dashBoard
+package com.krunal3kapadiya.popularmovies.dashBoard.movies
 
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
@@ -13,7 +13,6 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import com.krunal3kapadiya.popularmovies.MovieDetailActivity
 import com.krunal3kapadiya.popularmovies.R
-import com.krunal3kapadiya.popularmovies.dashBoard.movies.MoviesViewModel
 import com.krunal3kapadiya.popularmovies.data.adapter.MovieRVAdapter
 import com.krunal3kapadiya.popularmovies.data.model.Movies
 import kotlinx.android.synthetic.main.fragment_movies.*

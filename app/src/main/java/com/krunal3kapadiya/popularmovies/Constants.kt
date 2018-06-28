@@ -5,7 +5,6 @@ import android.net.ConnectivityManager
 
 object Constants {
     var BASE_IMAGE_URL = "http://image.tmdb.org/t/p"
-    var API_KEY = "67d7b19e6283aefb8cd9ea32914cea7f"
     var POSTER_SIZE = "/w185"
     var POSTER_SIZE_500 = "/w500"
 

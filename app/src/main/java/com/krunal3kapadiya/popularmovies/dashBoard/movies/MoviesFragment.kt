@@ -1,15 +1,11 @@
 package com.krunal3kapadiya.popularmovies.dashBoard.movies
 
-import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
-import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.krunal3kapadiya.popularmovies.R
-import com.krunal3kapadiya.popularmovies.dashBoard.NowPlayingFragment
 import com.krunal3kapadiya.popularmovies.dashBoard.TabFragmentAdapter
 import kotlinx.android.synthetic.main.fragment_movies.*
 
