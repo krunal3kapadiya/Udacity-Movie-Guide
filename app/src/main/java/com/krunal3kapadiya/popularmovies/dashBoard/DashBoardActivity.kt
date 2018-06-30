@@ -4,6 +4,8 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.NavigationView
+import android.support.design.widget.TabLayout
+import android.support.v4.app.Fragment
 import android.support.v4.view.GravityCompat
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
@@ -43,16 +45,36 @@ class DashBoardActivity : AppCompatActivity(), SearchView.OnQueryTextListener, N
 
         nav_view.setNavigationItemSelectedListener(this)
 
+        tab_layout.addTab(tab_layout.newTab().setText(getString(R.string.title_movies_fragment)), 0, true)
+        tab_layout.addTab(tab_layout.newTab().setText(getString(R.string.title_tv_fragment)), 1, false)
+        tab_layout.addTab(tab_layout.newTab().setText(getString(R.string.title_actors_fragment)), 2, false)
 
-        val adapter = TabFragmentAdapter(supportFragmentManager)
+        supportFragmentManager.beginTransaction().replace(R.id.frame, MoviesFragment.newInstance()).commit()
 
-        adapter.addFragment(MoviesFragment.newInstance(), getString(R.string.title_movies_fragment))
-        adapter.addFragment(TvShowsFragment.newInstance(), getString(R.string.title_tv_fragment))
-        adapter.addFragment(ActorsFragment.newInstance(), getString(R.string.title_actors_fragment))
+        tab_layout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+            override fun onTabReselected(tab: TabLayout.Tab?) {
+            }
 
-        viewPager.adapter = adapter
+            override fun onTabUnselected(tab: TabLayout.Tab?) {
+            }
 
-        tab_layout.setupWithViewPager(viewPager)
+            override fun onTabSelected(tab: TabLayout.Tab?) {
+                var fragment: Fragment = MoviesFragment.newInstance()
+
+                when (tab?.position) {
+                    0 -> {
+                        fragment = MoviesFragment.newInstance()
+                    }
+                    1 -> {
+                        fragment = TvShowsFragment.newInstance()
+                    }
+                    2 -> {
+                        fragment = ActorsFragment.newInstance()
+                    }
+                }
+                supportFragmentManager.beginTransaction().replace(R.id.frame, fragment).commit()
+            }
+        })
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
