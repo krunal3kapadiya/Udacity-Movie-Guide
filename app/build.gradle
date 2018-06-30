@@ -51,7 +51,7 @@ android {
 
     buildTypes {
         applicationVariants.all { variant ->
-            variant.buildConfigField "String", "TMDB_API_KEY", "\""+getApiKey()+"\""
+            variant.buildConfigField "String", "TMDB_API_KEY", "\"" + getApiKey() + "\""
         }
 
         debug {
@@ -62,7 +62,7 @@ android {
     buildToolsVersion '27.0.3'
 }
 
-static def getApiKey(){
+static def getApiKey() {
     def Properties props = new Properties()
     props.load(new FileInputStream(new File('secrets.properties')))
     return props['TMDB_API_KEY']
@@ -92,6 +92,7 @@ dependencies {
     api deps.reactivex.rxAndroid
 
     api deps.google.dagger
+    implementation 'com.android.support.constraint:constraint-layout:1.1.2'
     kapt deps.google.daggerProcessor
     api deps.google.gson
 

@@ -31,6 +31,7 @@ class TvShowsFragment : Fragment() {
         adapter.addFragment(TvListingFragment.newInstance(3), "Popular")
         adapter.addFragment(TvListingFragment.newInstance(4), "Top Rated")
 
+        moviesViewPager.offscreenPageLimit = 1
         moviesViewPager.adapter = adapter
 
         moviesTab.setupWithViewPager(moviesViewPager)

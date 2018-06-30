@@ -8,17 +8,4 @@
         android:title="@string/search"
         app:showAsAction="always"
         app:actionViewClass="android.support.v7.widget.SearchView"/>
-
-    <group android:checkableBehavior="single">
-        <item
-            android:id="@+id/action_sort_pop"
-            android:checked="true"
-            android:title="@string/action_most_popular"/>
-        <item
-            android:id="@+id/action_sort_rate"
-            android:title="@string/action_highest_rated"/>
-        <item
-            android:id="@+id/action_favorite"
-            android:title="@string/action_favorite"/>
-    </group>
 </menu>

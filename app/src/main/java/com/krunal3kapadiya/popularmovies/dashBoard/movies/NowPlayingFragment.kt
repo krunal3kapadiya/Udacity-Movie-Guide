@@ -36,10 +36,10 @@ class NowPlayingFragment : Fragment(), MovieRVAdapter.OnItemClick {
     }
 
     companion object {
-        fun newInstance(number:Int): NowPlayingFragment {
+        fun newInstance(number: Int): NowPlayingFragment {
             val fragment = NowPlayingFragment()
             val bundle = Bundle()
-            bundle.putInt("Number",number)
+            bundle.putInt("Number", number)
             fragment.arguments = bundle
             return fragment
         }
@@ -65,7 +65,7 @@ class NowPlayingFragment : Fragment(), MovieRVAdapter.OnItemClick {
 
         val layoutManager = GridLayoutManager(context, SPAN)
         rv_list_movie_main!!.layoutManager = layoutManager
-        mAdapter = MovieRVAdapter(context!!, mMoviesArrayList!!)
+        mAdapter = MovieRVAdapter(context!!, mMoviesArrayList!!, this)
         rv_list_movie_main!!.adapter = mAdapter
         val moviesViewModel = ViewModelProviders.of(this).get(MoviesViewModel::class.java)
         val number = arguments?.getInt("Number")

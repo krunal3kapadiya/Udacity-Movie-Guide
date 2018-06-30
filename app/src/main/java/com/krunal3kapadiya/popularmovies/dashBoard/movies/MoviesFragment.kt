@@ -31,7 +31,7 @@ class MoviesFragment : Fragment() {
         adapter.addFragment(NowPlayingFragment.newInstance(3), "Upcoming")
         adapter.addFragment(NowPlayingFragment.newInstance(4), "Top Rated")
         adapter.addFragment(NowPlayingFragment.newInstance(5), "Movies by the year")
-
+        moviesViewPager.offscreenPageLimit = 1
         moviesViewPager.adapter = adapter
 
         moviesTab.setupWithViewPager(moviesViewPager)

@@ -16,12 +16,15 @@ import kotlinx.android.synthetic.main.row_movies.view.*
 
 class MovieRVAdapter(
         private val mContext: Context,
-        private val mMovieArrayList: ArrayList<Movies>
+        private val mMovieArrayList: ArrayList<Movies>,
+        private val listener: OnItemClick
 ) : RecyclerView.Adapter<MovieRVAdapter.ViewHolder>() {
     private val mOnItemClick: OnItemClick
+    private val context: Context
 
     init {
-        mOnItemClick = mContext as OnItemClick
+        context = mContext
+        mOnItemClick = listener
         setHasStableIds(true)
     }
 
