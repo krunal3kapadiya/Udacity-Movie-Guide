@@ -10,34 +10,27 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
-import android.support.v4.content.ContextCompat.startActivity
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.graphics.Palette
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import android.view.WindowManager
-import android.widget.Toast
-import com.krunal3kapadiya.popularmovies.R.id.card_movie_review
 import com.krunal3kapadiya.popularmovies.data.adapter.ReviewRVAdapter
 import com.krunal3kapadiya.popularmovies.data.adapter.TrailerRVAdapter
-import com.krunal3kapadiya.popularmovies.data.api.MovieApiClient
 import com.krunal3kapadiya.popularmovies.data.api.MovieApi
-import com.krunal3kapadiya.popularmovies.data.model.*
+import com.krunal3kapadiya.popularmovies.data.api.MovieApiClient
+import com.krunal3kapadiya.popularmovies.data.model.Movies
+import com.krunal3kapadiya.popularmovies.data.model.Reviews
+import com.krunal3kapadiya.popularmovies.data.model.Trailer
 import com.squareup.picasso.Picasso
 import com.squareup.picasso.Target
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_movie_detail.*
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import java.util.*
 import java.util.regex.Pattern
-import kotlin.collections.ArrayList
 
 class MovieDetailActivity(private var isFavorite: Boolean = false) : AppCompatActivity(), TrailerRVAdapter.OnItemClick, ReviewRVAdapter.OnReviewItemClick {
 

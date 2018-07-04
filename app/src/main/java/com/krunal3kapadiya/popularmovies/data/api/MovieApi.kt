@@ -17,10 +17,13 @@ limitations under the License.
 
 package com.krunal3kapadiya.popularmovies.data.api
 
+import com.krunal3kapadiya.popularmovies.dashBoard.actors.ActorsDetailResponse
+import com.krunal3kapadiya.popularmovies.dashBoard.actors.ActorsResponse
 import com.krunal3kapadiya.popularmovies.data.model.CastResponse
 import com.krunal3kapadiya.popularmovies.data.model.MovieResponse
 import com.krunal3kapadiya.popularmovies.data.model.ReviewsResponse
 import com.krunal3kapadiya.popularmovies.data.model.TrailerResponse
+import com.krunal3kapadiya.popularmovies.genres.GenresListResponse
 import io.reactivex.Observable
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -79,4 +82,16 @@ internal interface MovieApi {
     fun getCastList(@Path("id") id: Long, @Query("api_key") apiKey: String): Observable<CastResponse>
 
     fun getMovieByYear(apI_KEY: String): Observable<MovieResponse>
+
+    @GET("genre/tv/list/")
+    fun getGenresList(@Query("api_key") apiKey: String): Observable<GenresListResponse>
+
+    @GET("person/popular")
+    fun getActorsList(@Query("api_key") apiKey: String): Observable<ActorsResponse>
+
+    @GET("person/{person_id}")
+    fun getActorsDetails(
+            @Query("api_key") apiKey: String,
+            @Path("person_id") personId: Int
+    ): Observable<ActorsDetailResponse>
 }

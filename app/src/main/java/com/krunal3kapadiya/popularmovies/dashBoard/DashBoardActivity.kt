@@ -16,6 +16,7 @@ import com.krunal3kapadiya.popularmovies.R
 import com.krunal3kapadiya.popularmovies.dashBoard.actors.ActorsFragment
 import com.krunal3kapadiya.popularmovies.dashBoard.movies.MoviesFragment
 import com.krunal3kapadiya.popularmovies.dashBoard.tvShows.TvShowsFragment
+import com.krunal3kapadiya.popularmovies.genres.GenresActivity
 import kotlinx.android.synthetic.main.activity_dashboard.*
 import kotlinx.android.synthetic.main.app_bar_main.*
 import kotlinx.android.synthetic.main.content_main.*
@@ -127,6 +128,9 @@ class DashBoardActivity : AppCompatActivity(), SearchView.OnQueryTextListener, N
             }
             R.id.nav_send -> {
 
+            }
+            R.id.nav_genre -> {
+                GenresActivity.launch(this)
             }
         }
         drawer_layout.closeDrawer(GravityCompat.START)

@@ -25,6 +25,21 @@
             android:label="@string/title_activity_movie_detail"
             android:theme="@style/AppTheme.NoActionBar" />
 
+        <activity
+            android:name=".genres.GenresActivity"
+            android:label="Genres"
+            android:parentActivityName=".dashBoard.DashBoardActivity" />
+
+        <activity
+            android:name=".dashBoard.actors.ActorsDetailActivity"
+            android:label="Genres"
+            android:parentActivityName=".dashBoard.DashBoardActivity" />
+
+        <activity
+            android:name=".SearchActivity"
+            android:label="Genres"
+            android:parentActivityName=".dashBoard.DashBoardActivity" />
+
         <meta-data
             android:name="io.fabric.ApiKey"
             android:value="442d97869312f0d19f6b3b6e434013073d3e838d" />
