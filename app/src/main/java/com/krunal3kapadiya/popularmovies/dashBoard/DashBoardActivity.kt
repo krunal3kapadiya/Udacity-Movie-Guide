@@ -13,6 +13,7 @@ import android.support.v7.widget.SearchView
 import android.view.Menu
 import android.view.MenuItem
 import com.krunal3kapadiya.popularmovies.R
+import com.krunal3kapadiya.popularmovies.SearchActivity
 import com.krunal3kapadiya.popularmovies.dashBoard.actors.ActorsFragment
 import com.krunal3kapadiya.popularmovies.dashBoard.movies.MoviesFragment
 import com.krunal3kapadiya.popularmovies.dashBoard.tvShows.TvShowsFragment
@@ -101,7 +102,8 @@ class DashBoardActivity : AppCompatActivity(), SearchView.OnQueryTextListener, N
     }
 
     override fun onQueryTextSubmit(query: String?): Boolean {
-        return false
+        query?.let { SearchActivity.launch(this, it) }
+        return true
     }
 
     override fun onQueryTextChange(newText: String?): Boolean {

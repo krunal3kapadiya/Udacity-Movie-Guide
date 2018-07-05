@@ -1,5 +1,6 @@
 package com.krunal3kapadiya.popularmovies.genres
 
+import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.content.Intent
@@ -21,7 +22,9 @@ class GenresActivity : AppCompatActivity() {
 
         val viewModel = ViewModelProviders.of(this).get(GenresViewModel::class.java)
 
-        viewModel.getGenresList()
+        viewModel.getGenresList().observe(this, Observer {
+            it?.genres!![0].name
+        })
 
     }
 }

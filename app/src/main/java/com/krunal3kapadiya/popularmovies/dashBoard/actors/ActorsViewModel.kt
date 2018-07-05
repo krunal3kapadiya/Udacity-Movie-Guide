@@ -33,7 +33,7 @@ class ActorsViewModel : ViewModel() {
         val actorsDetail = MediatorLiveData<ActorsDetailResponse>()
         val movieClient = MovieApiClient.client!!
                 .create(MovieApi::class.java)
-        val genres: Observable<ActorsDetailResponse>? = movieClient.getActorsDetails(BuildConfig.TMDB_API_KEY, actorId)
+        val genres: Observable<ActorsDetailResponse>? = movieClient.getActorsDetails(actorId, BuildConfig.TMDB_API_KEY)
         genres?.subscribeOn(Schedulers.io())?.observeOn(AndroidSchedulers.mainThread())
                 ?.subscribe(
                         {

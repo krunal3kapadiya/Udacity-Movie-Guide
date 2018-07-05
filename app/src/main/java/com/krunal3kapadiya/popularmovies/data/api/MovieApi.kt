@@ -19,10 +19,7 @@ package com.krunal3kapadiya.popularmovies.data.api
 
 import com.krunal3kapadiya.popularmovies.dashBoard.actors.ActorsDetailResponse
 import com.krunal3kapadiya.popularmovies.dashBoard.actors.ActorsResponse
-import com.krunal3kapadiya.popularmovies.data.model.CastResponse
-import com.krunal3kapadiya.popularmovies.data.model.MovieResponse
-import com.krunal3kapadiya.popularmovies.data.model.ReviewsResponse
-import com.krunal3kapadiya.popularmovies.data.model.TrailerResponse
+import com.krunal3kapadiya.popularmovies.data.model.*
 import com.krunal3kapadiya.popularmovies.genres.GenresListResponse
 import io.reactivex.Observable
 import retrofit2.http.GET
@@ -54,11 +51,11 @@ internal interface MovieApi {
     @GET("movie/now_playing")
     fun getNowPlayingMovies(@Query("api_key") apiKey: String): Observable<MovieResponse>
 
-    @GET("movie/search/movie")
+    @GET("search/movie")
     fun searchMovie(@Query("api_key") apiKey: String,
                     @Query("query") query: String,
                     @Query("page") page: Int,
-                    @Query("include_adult") includeAdult: Boolean): Observable<Any>
+                    @Query("include_adult") includeAdult: Boolean): Observable<SearchResponse>
 
     @GET("movie/upcoming")
     fun getUpComingMovies(@Query("api_key") apiKey: String): Observable<MovieResponse>
@@ -83,7 +80,7 @@ internal interface MovieApi {
 
     fun getMovieByYear(apI_KEY: String): Observable<MovieResponse>
 
-    @GET("genre/tv/list/")
+    @GET("genre/tv/list")
     fun getGenresList(@Query("api_key") apiKey: String): Observable<GenresListResponse>
 
     @GET("person/popular")
@@ -91,7 +88,7 @@ internal interface MovieApi {
 
     @GET("person/{person_id}")
     fun getActorsDetails(
-            @Query("api_key") apiKey: String,
-            @Path("person_id") personId: Int
+            @Path("person_id") personId: Int,
+            @Query("api_key") apiKey: String
     ): Observable<ActorsDetailResponse>
 }
