@@ -3,11 +3,11 @@
 buildscript {
     ext.versions = [
             'minSdk'           : 18,
-            'compileSdk'       : 27,
+            'compileSdk'       : 28,
             'supportVer'       : '27.1.1',
 
-            'buildTools'       : '27.0.3',
-            'androidPlugin'    : '3.1.3',
+            'buildTools'       : '28.0.0',
+            'androidPlugin'    : '3.4.1',
             'kotlin'           : '1.2.50',
             'constraint'       : '1.1.2',
             'archComp'         : '1.1.0',
@@ -54,10 +54,10 @@ buildscript {
                     'constraint'   : "com.android.support.constraint:constraint-layout:${versions.constraint}"
 
             ],
-            kotlin    : [
-                    'gradlePlugin': "org.jetbrains.kotlin:kotlin-gradle-plugin:${versions.kotlin}",
-                    'stdlib'      : "org.jetbrains.kotlin:kotlin-stdlib-jre7:${versions.kotlin}",
-            ],
+//            kotlin    : [
+//                    'gradlePlugin': "org.jetbrains.kotlin:kotlin-gradle-plugin:${versions.kotlin}",
+//                    'stdlib'      : "org.jetbrains.kotlin:kotlin-stdlib-jre7:${versions.kotlin}",
+//            ],
             reactivex : [
                     'rxJava'   : "io.reactivex.rxjava2:rxjava:${versions.rxJava}",
                     'rxAndroid': "io.reactivex.rxjava2:rxandroid:${versions.rxAndroid}"
@@ -101,7 +101,8 @@ buildscript {
     dependencies {
         classpath deps.android.gradlePlugin
         classpath deps.google.gmsPlugin
-        classpath deps.kotlin.gradlePlugin
+//        classpath deps.kotlin.gradlePlugin
+        classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:1.3.41'
 
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files

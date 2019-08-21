@@ -64,16 +64,16 @@ internal interface MovieApi {
     TV List
     ---*/
     @GET("tv/on_the_air")
-    fun tvOnAir(@Query("api_key") apiKey: String): Observable<MovieResponse>
+    fun tvOnAir(@Query("api_key") apiKey: String): Observable<TVResponse>
 
     @GET("tv/airing_today")
-    fun tvAiringToday(@Query("api_key") apiKey: String): Observable<MovieResponse>
+    fun tvAiringToday(@Query("api_key") apiKey: String): Observable<TVResponse>
 
     @GET("tv/popular")
-    fun tvPopular(@Query("api_key") apiKey: String): Observable<MovieResponse>
+    fun tvPopular(@Query("api_key") apiKey: String): Observable<TVResponse>
 
     @GET("tv/top_rated")
-    fun tvTopRated(@Query("api_key") apiKey: String): Observable<MovieResponse>
+    fun tvTopRated(@Query("api_key") apiKey: String): Observable<TVResponse>
 
     @GET("movie/{id}/casts")
     fun getCastList(@Path("id") id: Long, @Query("api_key") apiKey: String): Observable<CastResponse>

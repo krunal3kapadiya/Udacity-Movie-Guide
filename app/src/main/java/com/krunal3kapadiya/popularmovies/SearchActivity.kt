@@ -6,7 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import android.util.Log
+import android.widget.Toast
 
 class SearchActivity : AppCompatActivity() {
 
@@ -25,8 +25,7 @@ class SearchActivity : AppCompatActivity() {
         val viewModel = ViewModelProviders.of(this).get(SearchViewModel::class.java)
         viewModel.searchMovies(intent.getStringExtra("searchString"))
                 .observe(this, Observer {
-                    Log.d("SearchResponse", it?.posterPath)
+                    Toast.makeText(this, "Title is " + it?.title, Toast.LENGTH_LONG).show()
                 })
-
     }
 }

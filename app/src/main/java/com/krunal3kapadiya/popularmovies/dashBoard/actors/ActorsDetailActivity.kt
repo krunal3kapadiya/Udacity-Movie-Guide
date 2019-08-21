@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.widget.Toast
 import com.krunal3kapadiya.popularmovies.R
 
 class ActorsDetailActivity : AppCompatActivity() {
@@ -23,7 +24,8 @@ class ActorsDetailActivity : AppCompatActivity() {
 
         val actorId = intent.getIntExtra("actorId", 0)
         val viewModel = ViewModelProviders.of(this).get(ActorsViewModel::class.java)
-
+        // TODO create tab screen here
+        //
         viewModel.getActorsDetail(actorId).observe(this, Observer {
             it?.adult
             it?.profilePath
@@ -38,6 +40,7 @@ class ActorsDetailActivity : AppCompatActivity() {
             it?.placeOfBirth
             it?.popularity
             it?.id
+            supportActionBar?.title = it?.name
         })
     }
 }

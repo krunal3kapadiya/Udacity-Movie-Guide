@@ -9,19 +9,21 @@ import com.krunal3kapadiya.popularmovies.data.api.MovieApi
 import com.krunal3kapadiya.popularmovies.data.api.MovieApiClient
 import com.krunal3kapadiya.popularmovies.data.model.MovieResponse
 import com.krunal3kapadiya.popularmovies.data.model.Movies
+import com.krunal3kapadiya.popularmovies.data.model.Result
+import com.krunal3kapadiya.popularmovies.data.model.TVResponse
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 
 class TvViewModel : ViewModel() {
     val errorMessage = MediatorLiveData<Boolean>()
-    val movieArrayList = MediatorLiveData<ArrayList<Movies>>()
+    val movieArrayList = MediatorLiveData<List<Result>>()
 
 
     fun getPopularTvList(number: Int?) {
         val movieClient = MovieApiClient.client!!
                 .create(MovieApi::class.java)
-        var getTv: Observable<MovieResponse>? = null
+        var getTv: Observable<TVResponse>? = null
         when (number) {
             1 -> {
                 getTv = movieClient.tvAiringToday(BuildConfig.TMDB_API_KEY)

@@ -8,17 +8,17 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import com.krunal3kapadiya.popularmovies.Constants
 import com.krunal3kapadiya.popularmovies.R
-import com.krunal3kapadiya.popularmovies.data.model.Movies
+import com.krunal3kapadiya.popularmovies.data.model.Result
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.row_movies.view.*
 
-class MovieRVAdapter(
+class TVRVAdapter(
         private val mContext: Context,
         private val listener: OnItemClick
-) : RecyclerView.Adapter<MovieRVAdapter.ViewHolder>() {
+) : RecyclerView.Adapter<TVRVAdapter.ViewHolder>() {
     private val mOnItemClick: OnItemClick
     private val context: Context
-    private val mMovieArrayList: ArrayList<Movies> = ArrayList()
+    private val mMovieArrayList: ArrayList<Result> = ArrayList()
 
     init {
         context = mContext
@@ -67,7 +67,7 @@ class MovieRVAdapter(
     }
 
 
-    fun setData(it: ArrayList<Movies>?) {
+    fun setData(it: List<Result>?) {
         mMovieArrayList.clear()
         if (it != null) {
             for (movies in it) {
@@ -78,10 +78,10 @@ class MovieRVAdapter(
     }
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        fun bind(mMovieArrayList: List<Movies>) {
+        fun bind(mMovieArrayList: List<Result>) {
             with(mMovieArrayList) {
                 Picasso.with(mContext)
-                        .load(Constants.BASE_IMAGE_URL + Constants.POSTER_SIZE + mMovieArrayList[position].url)
+                        .load(Constants.BASE_IMAGE_URL + Constants.POSTER_SIZE + mMovieArrayList[adapterPosition].backdropPath)
 //                        .placeholder(R.mipmap.ic_movie)
                         .into(itemView.img_movie_row)
 
@@ -91,6 +91,6 @@ class MovieRVAdapter(
     }
 
     interface OnItemClick {
-        fun onItemClick(pos: Int, view: ImageView?, movies: Movies)
+        fun onItemClick(pos: Int, view: ImageView?, movies: Result)
     }
 }

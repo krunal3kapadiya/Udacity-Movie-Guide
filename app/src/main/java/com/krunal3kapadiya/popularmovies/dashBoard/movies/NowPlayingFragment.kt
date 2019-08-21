@@ -20,9 +20,9 @@ import kotlinx.android.synthetic.main.fragment_now_playing.*
 import java.util.*
 
 class NowPlayingFragment : Fragment(), MovieRVAdapter.OnItemClick {
-    override fun onItemClick(pos: Int, view: ImageView?) {
+    override fun onItemClick(pos: Int, view: ImageView?, movies: Movies) {
         val intent = Intent(context, MovieDetailActivity::class.java)
-        intent.putExtra(MovieDetailActivity.ARG_MOVIE, mMoviesArrayList!![pos])
+        intent.putExtra(MovieDetailActivity.ARG_MOVIE, movies)
 
 //        val options = view?.let {
 //            ActivityOptionsCompat.makeSceneTransitionAnimation(
@@ -45,7 +45,6 @@ class NowPlayingFragment : Fragment(), MovieRVAdapter.OnItemClick {
         }
     }
 
-    private var mMoviesArrayList: ArrayList<Movies>? = null
     private var mAdapter: MovieRVAdapter? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -55,8 +54,6 @@ class NowPlayingFragment : Fragment(), MovieRVAdapter.OnItemClick {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        mMoviesArrayList = ArrayList()
-
         var SPAN = 2
 
         if (resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
@@ -65,7 +62,7 @@ class NowPlayingFragment : Fragment(), MovieRVAdapter.OnItemClick {
 
         val layoutManager = GridLayoutManager(context, SPAN)
         rv_list_movie_main!!.layoutManager = layoutManager
-        mAdapter = MovieRVAdapter(context!!, mMoviesArrayList!!, this)
+        mAdapter = MovieRVAdapter(context!!, this)
         rv_list_movie_main!!.adapter = mAdapter
         val moviesViewModel = ViewModelProviders.of(this).get(MoviesViewModel::class.java)
         val number = arguments?.getInt("Number")

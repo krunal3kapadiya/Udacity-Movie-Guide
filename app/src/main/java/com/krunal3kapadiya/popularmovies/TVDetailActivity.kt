@@ -14,9 +14,7 @@ import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.graphics.Palette
 import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.LinearSnapHelper
 import android.support.v7.widget.RecyclerView
-import android.support.v7.widget.SnapHelper
 import android.view.MenuItem
 import android.view.View
 import android.view.WindowManager
@@ -25,6 +23,7 @@ import com.krunal3kapadiya.popularmovies.data.adapter.TrailerRVAdapter
 import com.krunal3kapadiya.popularmovies.data.api.MovieApi
 import com.krunal3kapadiya.popularmovies.data.api.MovieApiClient
 import com.krunal3kapadiya.popularmovies.data.model.Movies
+import com.krunal3kapadiya.popularmovies.data.model.Result
 import com.krunal3kapadiya.popularmovies.data.model.Reviews
 import com.krunal3kapadiya.popularmovies.data.model.Trailer
 import com.squareup.picasso.Picasso
@@ -34,7 +33,7 @@ import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_movie_detail.*
 import java.util.regex.Pattern
 
-class MovieDetailActivity(private var isFavorite: Boolean = false) : AppCompatActivity(), TrailerRVAdapter.OnItemClick, ReviewRVAdapter.OnReviewItemClick {
+class TVDetailActivity(private var isFavorite: Boolean = false) : AppCompatActivity(), TrailerRVAdapter.OnItemClick, ReviewRVAdapter.OnReviewItemClick {
 
     private var mContext: Context? = null
     private var movieId: Long = 0
@@ -49,30 +48,34 @@ class MovieDetailActivity(private var isFavorite: Boolean = false) : AppCompatAc
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val movieItem = intent.getParcelableExtra<Movies>(ARG_MOVIE)
+        val movieItem = intent.getParcelableExtra<Result>(ARG_MOVIE)
 
-        mContext = this@MovieDetailActivity
+        mContext = this@TVDetailActivity
 
-        Picasso.with(this)
-                .load(Constants.BASE_IMAGE_URL + Constants.POSTER_SIZE + movieItem.url)
-                .placeholder(R.mipmap.ic_movie)
-                .into(object : Target {
-                    override fun onBitmapLoaded(bitmap: Bitmap, from: Picasso.LoadedFrom) {
-                        mBitmap = bitmap
-                        val palette = Palette.from(bitmap).generate()
-                        themeLightColor = palette.getDominantColor(ContextCompat.getColor(mContext!!, R.color.colorAccent))
-                        themeDarkColor = palette.getDarkVibrantColor(ContextCompat.getColor(mContext!!, R.color.colorAccent))
+        movieItem.backdropPath?.let {
+            Picasso.with(this)
+                    .load(Constants.BASE_IMAGE_URL + Constants.POSTER_SIZE + movieItem.backdropPath)
+                    .placeholder(R.mipmap.ic_movie)
+                    .into(object : Target {
+                        override fun onBitmapLoaded(bitmap: Bitmap, from: Picasso.LoadedFrom) {
+                            mBitmap = bitmap
+                            val palette = Palette.from(bitmap).generate()
+                            themeLightColor = palette.getDominantColor(ContextCompat.getColor(mContext!!, R.color.colorAccent))
+                            themeDarkColor = palette.getDarkVibrantColor(ContextCompat.getColor(mContext!!, R.color.colorAccent))
 
-                    }
+                        }
 
-                    override fun onBitmapFailed(errorDrawable: Drawable) {
+                        override fun onBitmapFailed(errorDrawable: Drawable) {
 
-                    }
+                        }
 
-                    override fun onPrepareLoad(placeHolderDrawable: Drawable) {
+                        override fun onPrepareLoad(placeHolderDrawable: Drawable) {
 
-                    }
-                })
+                        }
+                    })
+
+        }
+
 
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -114,14 +117,14 @@ class MovieDetailActivity(private var isFavorite: Boolean = false) : AppCompatAc
 
 
         supportActionBar!!.title = movieItem.name
-        arb_movie_ratings!!.rating = java.lang.Float.valueOf((movieItem.rating!!.toDouble() / 2.0).toString())!!
-        txt_movie_overview!!.text = movieItem.overView
+        arb_movie_ratings!!.rating = java.lang.Float.valueOf((movieItem.voteAverage!!.toDouble() / 2.0).toString())!!
+        txt_movie_overview!!.text = movieItem.overview
 
         val pattern = Pattern.compile("(\\d{4})-(\\d{2})-(\\d{2})")
-        val dateMatcher = pattern.matcher(movieItem.releaseDate)
+        /*val dateMatcher = pattern.matcher(movieItem?.firstAirDate)
         if (dateMatcher.find()) {
             txt_movie_release!!.text = dateMatcher.group(1)
-        }
+        }*/
 
         movieId = movieItem.id.toLong()
 
@@ -131,9 +134,6 @@ class MovieDetailActivity(private var isFavorite: Boolean = false) : AppCompatAc
         mTrailerAdapter = TrailerRVAdapter(this, mTrailerList!!)
         rv_movie_trailer!!.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         rv_movie_trailer!!.adapter = mTrailerAdapter
-        val snapHelper: SnapHelper = LinearSnapHelper()
-        snapHelper.attachToRecyclerView(rv_movie_trailer!!)
-
         rv_movie_trailer!!.addOnScrollListener(object : RecyclerView.OnScrollListener() {})
         rv_movie_reviews!!.layoutManager = LinearLayoutManager(this)
         rv_movie_reviews!!.adapter = mReviewAdapter
@@ -161,7 +161,7 @@ class MovieDetailActivity(private var isFavorite: Boolean = false) : AppCompatAc
             favorite_button!!.setImageResource(R.mipmap.ic_favorite_white)
 
         Picasso.with(this)
-                .load(Constants.BASE_IMAGE_URL + Constants.POSTER_SIZE_500 + movieItem.backDropPath)
+                .load(Constants.BASE_IMAGE_URL + Constants.POSTER_SIZE_500 + movieItem.backdropPath)
                 .into(movie_detail_image)
 
         ctl_movie_detail!!.setContentScrimColor(themeLightColor)

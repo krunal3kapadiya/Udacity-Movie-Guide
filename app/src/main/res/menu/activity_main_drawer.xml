@@ -5,31 +5,31 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_camera"
-            android:icon="@drawable/ic_menu_camera"
+            android:id="@+id/nav_watchlist"
+            android:icon="@drawable/ic_menu_send"
             android:title="WatchList" />
         <item
-            android:id="@+id/nav_gallery"
-            android:icon="@drawable/ic_menu_gallery"
+            android:id="@+id/nav_favourites"
+            android:icon="@drawable/ic_menu_send"
             android:title="Favorites (Account)" />
         <item
-            android:id="@+id/nav_slideshow"
-            android:icon="@drawable/ic_menu_slideshow"
+            android:id="@+id/nav_rated"
+            android:icon="@drawable/ic_menu_send"
             android:title="Rated" />
         <item
-            android:id="@+id/nav_manage"
-            android:icon="@drawable/ic_menu_manage"
-            android:title="Logout" />
+            android:id="@+id/nav_login"
+            android:icon="@drawable/ic_menu_send"
+            android:title="Login" />
     </group>
 
     <item android:title="Communicate">
         <menu>
             <item
                 android:id="@+id/nav_discover_movies"
-                android:icon="@drawable/ic_menu_share"
+                android:icon="@drawable/ic_menu_send"
                 android:title="Discover Movies" />
             <item
-                android:id="@+id/nav_send"
+                android:id="@+id/nav_discover_tv_shows"
                 android:icon="@drawable/ic_menu_send"
                 android:title="Discover TV Shows" />
             <item
@@ -37,7 +37,7 @@
                 android:icon="@drawable/ic_menu_send"
                 android:title="Genre" />
             <item
-                android:id="@+id/nav_favourites"
+                android:id="@+id/nav_favourites_device"
                 android:icon="@drawable/ic_menu_send"
                 android:title="Favourites (Device)" />
         </menu>
@@ -47,7 +47,7 @@
         <menu>
             <item
                 android:id="@+id/nav_about"
-                android:icon="@drawable/ic_menu_share"
+                android:icon="@drawable/ic_menu_send"
                 android:title="About" />
             <item
                 android:id="@+id/nav_share"
@@ -57,6 +57,10 @@
                 android:id="@+id/nav_rate"
                 android:icon="@drawable/ic_menu_send"
                 android:title="Rate" />
+            <item
+                android:id="@+id/nav_apps"
+                android:icon="@drawable/ic_menu_send"
+                android:title="Apps" />
         </menu>
     </item>
 

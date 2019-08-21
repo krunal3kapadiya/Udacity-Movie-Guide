@@ -12,14 +12,17 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import com.krunal3kapadiya.popularmovies.MovieDetailActivity
 import com.krunal3kapadiya.popularmovies.R
+import com.krunal3kapadiya.popularmovies.TVDetailActivity
 import com.krunal3kapadiya.popularmovies.data.adapter.MovieRVAdapter
+import com.krunal3kapadiya.popularmovies.data.adapter.TVRVAdapter
 import com.krunal3kapadiya.popularmovies.data.model.Movies
+import com.krunal3kapadiya.popularmovies.data.model.Result
 import kotlinx.android.synthetic.main.fragment_now_playing.*
 
-class TvListingFragment : Fragment(), MovieRVAdapter.OnItemClick {
-    override fun onItemClick(pos: Int, view: ImageView?) {
-        val intent = Intent(context, MovieDetailActivity::class.java)
-        intent.putExtra(MovieDetailActivity.ARG_MOVIE, mMoviesArrayList!![pos])
+class TvListingFragment : Fragment(), TVRVAdapter.OnItemClick {
+    override fun onItemClick(pos: Int, view: ImageView?, movies: Result) {
+        val intent = Intent(context, TVDetailActivity::class.java)
+        intent.putExtra(MovieDetailActivity.ARG_MOVIE, movies)
         startActivity(intent)
     }
 
@@ -33,8 +36,7 @@ class TvListingFragment : Fragment(), MovieRVAdapter.OnItemClick {
         }
     }
 
-    private var mMoviesArrayList: ArrayList<Movies>? = null
-    private var mAdapter: MovieRVAdapter? = null
+    private var mAdapter: TVRVAdapter? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_now_playing, container, false)
@@ -44,8 +46,6 @@ class TvListingFragment : Fragment(), MovieRVAdapter.OnItemClick {
         super.onViewCreated(view, savedInstanceState)
         val viewModel = ViewModelProviders.of(this).get(TvViewModel::class.java)
 
-        mMoviesArrayList = ArrayList()
-
         var SPAN = 2
 
         if (resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
@@ -54,7 +54,7 @@ class TvListingFragment : Fragment(), MovieRVAdapter.OnItemClick {
 
         val layoutManager = GridLayoutManager(context, SPAN)
         rv_list_movie_main.layoutManager = layoutManager
-        mAdapter = MovieRVAdapter(context!!, mMoviesArrayList!!, this)
+        mAdapter = TVRVAdapter(context!!, this)
         rv_list_movie_main.adapter = mAdapter
         val number = arguments?.getInt("ID")
         viewModel.getPopularTvList(number)
