@@ -114,7 +114,7 @@ class DashBoardActivity : AppCompatActivity(), SearchView.OnQueryTextListener, N
         if (!searchView?.isIconified!!) {
             searchView?.isIconified = true
         }
-        query?.let { SearchActivity.launch(this, it) }
+        query?.let { SearchActivity.launch(this, it, tab_layout.selectedTabPosition) }
         return true
     }
 

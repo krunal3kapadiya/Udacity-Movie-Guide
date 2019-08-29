@@ -2,7 +2,6 @@ package com.krunal3kapadiya.popularmovies.dashBoard.tvShows
 
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
-import android.content.res.Configuration
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.GridLayoutManager
@@ -10,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import com.krunal3kapadiya.popularmovies.Constants
 import com.krunal3kapadiya.popularmovies.MovieDetailActivity
 import com.krunal3kapadiya.popularmovies.R
 import com.krunal3kapadiya.popularmovies.TVDetailActivity
@@ -43,14 +43,7 @@ class TvListingFragment : Fragment(), TVRVAdapter.OnItemClick {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val viewModel = ViewModelProviders.of(this).get(TvViewModel::class.java)
-
-        var SPAN = 3
-
-        if (resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            SPAN = 4
-        }
-
-        val layoutManager = GridLayoutManager(context, SPAN)
+        val layoutManager = GridLayoutManager(context, Constants.SPAN_RECYCLER_VIEW)
         rv_list_movie_main.layoutManager = layoutManager
         mAdapter = TVRVAdapter(context!!, this)
         rv_list_movie_main.adapter = mAdapter

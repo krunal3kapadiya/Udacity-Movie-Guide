@@ -20,9 +20,10 @@ import android.icu.lang.UCharacter.GraphemeClusterBreak.T
 class SearchActivity : AppCompatActivity() {
 
     companion object {
-        fun launch(context: Context, searchString: String) {
+        fun launch(context: Context, searchString: String, tabPosition: Int) {
             val intent = Intent(context, SearchActivity::class.java)
             intent.putExtra("searchString", searchString)
+            intent.putExtra("tabPosition", tabPosition)
             context.startActivity(intent)
         }
     }
@@ -34,7 +35,7 @@ class SearchActivity : AppCompatActivity() {
         setContentView(R.layout.activity_search)
         supportActionBar?.elevation = 0F
         supportActionBar!!.title = intent.getStringExtra("searchString")
-        val layoutManager = GridLayoutManager(this, 2)
+        val layoutManager = GridLayoutManager(this, 3)
 
         search_rv.layoutManager = layoutManager
         val mAdapter = MovieRVAdapter(object : MovieRVAdapter.OnItemClick {
@@ -64,7 +65,7 @@ class SearchActivity : AppCompatActivity() {
             }
         }
         // Adds the scroll listener to RecyclerView
-        search_rv.addOnScrollListener(scrollListener)
+        search_rv.addOnScrollListener(scrollListener as EndlessRecyclerViewScrollListener)
 
 //        layoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
 //            override fun getSpanSize(position: Int): Int {
@@ -79,7 +80,9 @@ class SearchActivity : AppCompatActivity() {
 
     private fun loadNextDataFromApi(adapter: MovieRVAdapter, page: Int) {
         val viewModel = ViewModelProviders.of(this).get(SearchViewModel::class.java)
-        viewModel.searchMovies(intent.getStringExtra("searchString"), page)
+        viewModel.searchMovies(intent.getStringExtra("searchString"),
+                intent.getIntExtra("tabPosition", 0),
+                page)
                 .observe(this, Observer {
                     //TODO check for null values
                     adapter.addData(it?.results)

@@ -19,6 +19,6 @@
 
     <style name="CustomTabTextAppearance" parent="@style/AppTheme">
         <item name="android:singleLine">true</item>
-        <item name="android:textSize">5dp</item>
+        <item name="android:textSize">5sp</item>
     </style>
 </resources>

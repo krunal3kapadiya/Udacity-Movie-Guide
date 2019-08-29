@@ -54,7 +54,7 @@ class TVDetailActivity(private var isFavorite: Boolean = false) : AppCompatActiv
 
         movieItem.backdropPath?.let {
             Picasso.with(this)
-                    .load(Constants.BASE_IMAGE_URL + Constants.POSTER_SIZE + movieItem.backdropPath)
+                    .load(Constants.BASE_IMAGE_URL + Constants.POSTER_SIZE_500 + movieItem.backdropPath)
                     .placeholder(R.mipmap.ic_movie)
                     .into(object : Target {
                         override fun onBitmapLoaded(bitmap: Bitmap, from: Picasso.LoadedFrom) {

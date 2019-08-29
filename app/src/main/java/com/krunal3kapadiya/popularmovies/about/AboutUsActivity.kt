@@ -26,7 +26,12 @@ class AboutUsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_about)
         supportActionBar?.elevation = 0F
-        about_txt.text = getString(R.string.about_website)
+        supportFragmentManager
+                .beginTransaction()
+                .replace(R.id.frame_layout, AboutFragment())
+                .commit()
+
+//        about_txt.text = getString(R.string.about_website)
 //        BundledEmojiCompatConfig(this)
 //                .apply {
 //                    EmojiCompat.init(this)

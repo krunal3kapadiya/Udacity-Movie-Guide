@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <Preference
+        android:icon="@mipmap/ic_movie"
+        android:title="@string/app_name" />
+
+    <Preference
+        android:icon="@drawable/ic_info_gray_24dp"
+        android:summary="1.0"
+        android:title="@string/text_version" />
+
+    <Preference
+        android:icon="@drawable/ic_change_gray_24dp"
+        android:title="@string/change_log" />
+
+    <PreferenceCategory android:title="Author">
+        <Preference
+            android:icon="@drawable/ic_author_gray_24dp"
+            android:title="@string/author" />
+        <Preference
+            android:icon="@drawable/ic_web_gray_24dp"
+            android:summary="View Website"
+            android:title="Website">
+            <intent
+                android:action="android.intent.action.VIEW"
+                android:data="@string/url_faq" />
+        </Preference>
+    </PreferenceCategory>
+
+</PreferenceScreen>

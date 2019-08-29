@@ -1,5 +1,9 @@
 package com.krunal3kapadiya.popularmovies.dashBoard.actors
 
+import android.graphics.Bitmap
+import android.graphics.drawable.Drawable
+import android.support.v4.content.ContextCompat
+import android.support.v7.graphics.Palette
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.OrientationEventListener
@@ -8,6 +12,7 @@ import android.view.ViewGroup
 import com.krunal3kapadiya.popularmovies.Constants
 import com.krunal3kapadiya.popularmovies.R
 import com.squareup.picasso.Picasso
+import com.squareup.picasso.Target
 import kotlinx.android.synthetic.main.row_movies.view.*
 
 class ActorsAdapter(listener: OnActorClickListener) : RecyclerView.Adapter<ActorsAdapter.ViewHolder>() {
@@ -50,8 +55,28 @@ class ActorsAdapter(listener: OnActorClickListener) : RecyclerView.Adapter<Actor
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         fun bind(result: Result) {
             Picasso.with(itemView.context)
-                    .load(Constants.BASE_IMAGE_URL + Constants.POSTER_SIZE + result.profilePath)
-                    .into(itemView.img_movie_row)
+                    .load(Constants.BASE_IMAGE_URL + Constants.POSTER_SIZE_500 + result.profilePath)
+                    .placeholder(R.mipmap.ic_movie)
+                    .into(object : Target {
+                        override fun onBitmapLoaded(bitmap: Bitmap, from: Picasso.LoadedFrom) {
+//                                mBitmap = bitmap
+                            itemView.img_movie_row.setImageBitmap(bitmap)
+                            val palette = Palette.from(bitmap).generate()
+                            val themeLightColor = palette.getDominantColor(ContextCompat.getColor(itemView.context!!, R.color.colorAccent))
+                            val themeDarkColor = palette.getDarkVibrantColor(ContextCompat.getColor(itemView.context!!, R.color.colorAccent))
+                            itemView.tv_movie_title.setBackgroundColor(themeLightColor)
+                        }
+
+                        override fun onBitmapFailed(errorDrawable: Drawable) {
+
+                        }
+
+                        override fun onPrepareLoad(placeHolderDrawable: Drawable) {
+
+                        }
+                    })
+            itemView.tv_movie_title.text = result.name
+
         }
     }
 

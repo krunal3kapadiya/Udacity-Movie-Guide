@@ -1,16 +1,20 @@
 package com.krunal3kapadiya.popularmovies.data.adapter
 
+import android.graphics.Bitmap
+import android.graphics.drawable.Drawable
 import android.support.v4.content.ContextCompat
+import android.support.v7.graphics.Palette
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.request.target.CustomTarget
+import com.bumptech.glide.request.transition.Transition
 import com.krunal3kapadiya.popularmovies.Constants
 import com.krunal3kapadiya.popularmovies.R
 import com.krunal3kapadiya.popularmovies.data.model.Movies
-import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.row_movies.view.*
 
 class MovieRVAdapter(
@@ -76,10 +80,27 @@ class MovieRVAdapter(
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun bind(mMovieArrayList: List<Movies>) {
             with(mMovieArrayList) {
-                Picasso.with(itemView.context)
-                        .load(Constants.BASE_IMAGE_URL + Constants.POSTER_SIZE + mMovieArrayList[position].url)
-//                        .placeholder(R.mipmap.ic_movie)
-                        .into(itemView.img_movie_row)
+                Glide.with(itemView.context)
+                        .asBitmap()
+                        .load(Constants.BASE_IMAGE_URL + Constants.POSTER_SIZE_500 + mMovieArrayList[position].url)
+                        .placeholder(R.mipmap.ic_movie)
+                        .into(object : CustomTarget<Bitmap>() {
+                            override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
+                                itemView.img_movie_row.setImageBitmap(resource)
+                                val palette = Palette.from(resource).generate()
+                                val themeLightColor = palette.getDominantColor(ContextCompat.getColor(itemView.context!!, R.color.colorAccent))
+                                val themeDarkColor = palette.getDarkVibrantColor(ContextCompat.getColor(itemView.context!!, R.color.colorAccent))
+                                itemView.tv_movie_title.setBackgroundColor(themeLightColor)
+                            }
+
+                            override fun onLoadCleared(placeholder: Drawable?) {
+                                // this is called when imageView is cleared on lifecycle call or for
+                                // some other reason.
+                                // if you are referencing the bitmap somewhere else too other than this imageView
+                                // clear it here as you can no longer have the bitmap
+                            }
+                        })
+
                 itemView.tv_movie_title.text = mMovieArrayList[position].name
                 itemView.img_movie_row.setOnClickListener { mOnItemClick.onItemClick(adapterPosition, itemView.img_movie_row, mMovieArrayList[adapterPosition]) }
             }

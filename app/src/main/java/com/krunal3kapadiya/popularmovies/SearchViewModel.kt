@@ -11,23 +11,57 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 
 class SearchViewModel : ViewModel() {
-    fun searchMovies(string: String, page: Int): MediatorLiveData<MovieResponse> {
+    fun searchMovies(string: String, tabPosition: Int, page: Int): MediatorLiveData<MovieResponse> {
         val searchMovie = MediatorLiveData<MovieResponse>()
         val movieClient = MovieApiClient.client!!
                 .create(MovieApi::class.java)
-        val genres: Observable<MovieResponse>? = movieClient.searchMovie(
-                BuildConfig.TMDB_API_KEY,
-                string,
-                page,
-                false)
-        genres?.subscribeOn(Schedulers.io())?.observeOn(AndroidSchedulers.mainThread())
-                ?.subscribe(
+
+        when (tabPosition) {
+            0 -> {
+                val genres: Observable<MovieResponse>? = movieClient.searchMovie(
+                        BuildConfig.TMDB_API_KEY,
+                        string,
+                        page,
+                        false)
+                genres?.subscribeOn(Schedulers.io())?.observeOn(AndroidSchedulers.mainThread())
+                        ?.subscribe(
+                                {
+                                    searchMovie.postValue(it)
+                                })
                         {
-                            searchMovie.postValue(it)
-                        })
-                {
-                    Log.e("MovieResponseException", it.message)
-                }
+                            Log.e("MovieResponseException", it.message)
+                        }
+
+            }
+            1 -> {
+                val genres: Observable<MovieResponse>? = movieClient.searchTVShows(
+                        BuildConfig.TMDB_API_KEY,
+                        string,
+                        page)
+                genres?.subscribeOn(Schedulers.io())?.observeOn(AndroidSchedulers.mainThread())
+                        ?.subscribe(
+                                {
+                                    searchMovie.postValue(it)
+                                })
+                        {
+                            Log.e("MovieResponseException", it.message)
+                        }
+            }
+            2 -> {
+                val genres: Observable<MovieResponse>? = movieClient.searchPerson(
+                        BuildConfig.TMDB_API_KEY,
+                        string,
+                        page)
+                genres?.subscribeOn(Schedulers.io())?.observeOn(AndroidSchedulers.mainThread())
+                        ?.subscribe(
+                                {
+                                    searchMovie.postValue(it)
+                                })
+                        {
+                            Log.e("MovieResponseException", it.message)
+                        }
+            }
+        }
         return searchMovie
     }
 }

@@ -55,7 +55,7 @@ class MovieDetailActivity(private var isFavorite: Boolean = false) : AppCompatAc
         mContext = this@MovieDetailActivity
 
         Picasso.with(this)
-                .load(Constants.BASE_IMAGE_URL + Constants.POSTER_SIZE + movieItem.url)
+                .load(Constants.BASE_IMAGE_URL + Constants.POSTER_SIZE_500 + movieItem.url)
                 .placeholder(R.mipmap.ic_movie)
                 .into(object : Target {
                     override fun onBitmapLoaded(bitmap: Bitmap, from: Picasso.LoadedFrom) {

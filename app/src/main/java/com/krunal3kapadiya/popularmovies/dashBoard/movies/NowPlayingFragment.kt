@@ -11,6 +11,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import com.krunal3kapadiya.popularmovies.Constants
 import com.krunal3kapadiya.popularmovies.MovieDetailActivity
 import com.krunal3kapadiya.popularmovies.R
 import com.krunal3kapadiya.popularmovies.data.adapter.MovieRVAdapter
@@ -53,15 +54,9 @@ class NowPlayingFragment : Fragment(), MovieRVAdapter.OnItemClick {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        var SPAN = 3
-
-        if (resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            SPAN = 4
-        }
-
-        val layoutManager = GridLayoutManager(context, SPAN)
+        val layoutManager = GridLayoutManager(context, Constants.SPAN_RECYCLER_VIEW)
         rv_list_movie_main!!.layoutManager = layoutManager
-        mAdapter = MovieRVAdapter( this)
+        mAdapter = MovieRVAdapter(this)
         rv_list_movie_main!!.adapter = mAdapter
         val moviesViewModel = ViewModelProviders.of(this).get(MoviesViewModel::class.java)
         val number = arguments?.getInt("Number")

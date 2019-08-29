@@ -29,7 +29,9 @@
 
     <string name="about_website">
         Made with ❤ from 🇮🇳
-        https://krunal3kapadiya.app
     </string>
-
+    <string name="text_version">Version</string>
+    <string name="change_log">Change Log</string>
+    <string name="author">Krunal Kapadiya</string>
+    <string name="url_faq">https://krunal3kapadiya.app</string>
 </resources>
