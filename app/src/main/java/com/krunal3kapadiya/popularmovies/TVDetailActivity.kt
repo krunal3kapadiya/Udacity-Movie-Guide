@@ -18,11 +18,11 @@ import android.support.v7.widget.RecyclerView
 import android.view.MenuItem
 import android.view.View
 import android.view.WindowManager
+import com.bumptech.glide.Glide
 import com.krunal3kapadiya.popularmovies.data.adapter.ReviewRVAdapter
 import com.krunal3kapadiya.popularmovies.data.adapter.TrailerRVAdapter
 import com.krunal3kapadiya.popularmovies.data.api.MovieApi
 import com.krunal3kapadiya.popularmovies.data.api.MovieApiClient
-import com.krunal3kapadiya.popularmovies.data.model.Movies
 import com.krunal3kapadiya.popularmovies.data.model.Result
 import com.krunal3kapadiya.popularmovies.data.model.Reviews
 import com.krunal3kapadiya.popularmovies.data.model.Trailer
@@ -160,7 +160,7 @@ class TVDetailActivity(private var isFavorite: Boolean = false) : AppCompatActiv
         else
             favorite_button!!.setImageResource(R.mipmap.ic_favorite_white)
 
-        Picasso.with(this)
+        Glide.with(this)
                 .load(Constants.BASE_IMAGE_URL + Constants.POSTER_SIZE_500 + movieItem.backdropPath)
                 .into(movie_detail_image)
 

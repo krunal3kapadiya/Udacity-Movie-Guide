@@ -20,6 +20,7 @@ import android.support.v7.widget.SnapHelper
 import android.view.MenuItem
 import android.view.View
 import android.view.WindowManager
+import com.bumptech.glide.Glide
 import com.krunal3kapadiya.popularmovies.data.adapter.ReviewRVAdapter
 import com.krunal3kapadiya.popularmovies.data.adapter.TrailerRVAdapter
 import com.krunal3kapadiya.popularmovies.data.api.MovieApi
@@ -62,7 +63,6 @@ class MovieDetailActivity(private var isFavorite: Boolean = false) : AppCompatAc
                         val palette = Palette.from(bitmap).generate()
                         themeLightColor = palette.getDominantColor(ContextCompat.getColor(mContext!!, R.color.colorAccent))
                         themeDarkColor = palette.getDarkVibrantColor(ContextCompat.getColor(mContext!!, R.color.colorAccent))
-
                     }
 
                     override fun onBitmapFailed(errorDrawable: Drawable) {
@@ -139,7 +139,7 @@ class MovieDetailActivity(private var isFavorite: Boolean = false) : AppCompatAc
         rv_movie_reviews!!.adapter = mReviewAdapter
 
         img_movie_poster!!.setImageBitmap(mBitmap)
-
+        img_movie_poster.setOnClickListener { ViewImageActivity.launch(this, mBitmap) }
         getReviewList()
         getTrailerList()
 
@@ -160,10 +160,14 @@ class MovieDetailActivity(private var isFavorite: Boolean = false) : AppCompatAc
         else
             favorite_button!!.setImageResource(R.mipmap.ic_favorite_white)
 
-        Picasso.with(this)
+        Glide.with(this)
                 .load(Constants.BASE_IMAGE_URL + Constants.POSTER_SIZE_500 + movieItem.backDropPath)
+                .placeholder(ContextCompat.getDrawable(this, R.mipmap.ic_movie))
                 .into(movie_detail_image)
 
+        movie_detail_image.setOnClickListener {
+            ViewImageActivity.launch(this, movieItem.backDropPath)
+        }
         ctl_movie_detail!!.setContentScrimColor(themeLightColor)
         favorite_button!!.backgroundTintList = ColorStateList.valueOf(themeLightColor)
     }

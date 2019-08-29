@@ -33,6 +33,17 @@ import retrofit2.http.Query
  */
 internal interface MovieApi {
 
+
+    @GET("/authentication/token/new")
+    fun createRequestToken(@Query("api_key") apiKey: String): Observable<RequestTokenResponse>
+
+    @GET("/authentication/token/validate_with_login")
+    fun validateThroughLogin(@Query("api_key") apiKey: String,
+                             @Query("username") username: String,
+                             @Query("password") password: String,
+                             @Query("request_token") requestToken: String): Observable<LoginResponse>
+
+
     /*---
     Movies List
     ---*/
@@ -55,7 +66,17 @@ internal interface MovieApi {
     fun searchMovie(@Query("api_key") apiKey: String,
                     @Query("query") query: String,
                     @Query("page") page: Int,
-                    @Query("include_adult") includeAdult: Boolean): Observable<SearchResponse>
+                    @Query("include_adult") includeAdult: Boolean): Observable<MovieResponse>
+
+    @GET("search/person")
+    fun searchPerson(@Query("api_key") apiKey: String,
+                     @Query("query") query: String,
+                     @Query("page") page: Int): Observable<MovieResponse>
+
+    @GET("/search/tv")
+    fun searchTVShows(@Query("api_key") apiKey: String,
+                      @Query("query") query: String,
+                      @Query("page") page: Int): Observable<MovieResponse>
 
     @GET("movie/upcoming")
     fun getUpComingMovies(@Query("api_key") apiKey: String): Observable<MovieResponse>
@@ -82,6 +103,10 @@ internal interface MovieApi {
 
     @GET("genre/tv/list")
     fun getGenresList(@Query("api_key") apiKey: String): Observable<GenresListResponse>
+
+    @GET("discover/movie")
+    fun getGenresById(@Query("api_key") apiKey: String,
+                      @Query("with_genres") with_genres: Int): Observable<MovieResponse>
 
     @GET("person/popular")
     fun getActorsList(@Query("api_key") apiKey: String): Observable<ActorsResponse>

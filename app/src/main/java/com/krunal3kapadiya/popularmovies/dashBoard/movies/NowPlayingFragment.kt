@@ -17,7 +17,6 @@ import com.krunal3kapadiya.popularmovies.data.adapter.MovieRVAdapter
 import com.krunal3kapadiya.popularmovies.data.model.Movies
 import kotlinx.android.synthetic.main.fragment_movies.*
 import kotlinx.android.synthetic.main.fragment_now_playing.*
-import java.util.*
 
 class NowPlayingFragment : Fragment(), MovieRVAdapter.OnItemClick {
     override fun onItemClick(pos: Int, view: ImageView?, movies: Movies) {
@@ -54,7 +53,7 @@ class NowPlayingFragment : Fragment(), MovieRVAdapter.OnItemClick {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        var SPAN = 2
+        var SPAN = 3
 
         if (resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
             SPAN = 4
@@ -62,7 +61,7 @@ class NowPlayingFragment : Fragment(), MovieRVAdapter.OnItemClick {
 
         val layoutManager = GridLayoutManager(context, SPAN)
         rv_list_movie_main!!.layoutManager = layoutManager
-        mAdapter = MovieRVAdapter(context!!, this)
+        mAdapter = MovieRVAdapter( this)
         rv_list_movie_main!!.adapter = mAdapter
         val moviesViewModel = ViewModelProviders.of(this).get(MoviesViewModel::class.java)
         val number = arguments?.getInt("Number")

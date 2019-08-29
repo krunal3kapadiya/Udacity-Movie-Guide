@@ -43,6 +43,7 @@ class DashBoardActivity : AppCompatActivity(), SearchView.OnQueryTextListener, N
 
 
         setSupportActionBar(toolbar)
+        supportActionBar?.elevation = 0F
 
         val toggle = ActionBarDrawerToggle(
                 this, drawer_layout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
@@ -69,12 +70,15 @@ class DashBoardActivity : AppCompatActivity(), SearchView.OnQueryTextListener, N
 
                 when (tab?.position) {
                     0 -> {
+                        searchView!!.queryHint = "Search Movies"
                         fragment = MoviesFragment.newInstance()
                     }
                     1 -> {
+                        searchView!!.queryHint = "Search TV Shows"
                         fragment = TvShowsFragment.newInstance()
                     }
                     2 -> {
+                        searchView!!.queryHint = "Search Actors"
                         fragment = ActorsFragment.newInstance()
                     }
                 }
@@ -88,13 +92,14 @@ class DashBoardActivity : AppCompatActivity(), SearchView.OnQueryTextListener, N
         val searchMenuItem = menu.findItem(R.id.action_search)
         searchView = searchMenuItem.actionView as SearchView
         searchView!!.setOnQueryTextListener(this)
-        searchView!!.queryHint = "Search"
         return true
     }
 
 
     override fun onBackPressed() {
-        if (drawer_layout.isDrawerOpen(GravityCompat.START)) {
+        if (!searchView?.isIconified!!) {
+            searchView?.isIconified = true
+        } else if (drawer_layout.isDrawerOpen(GravityCompat.START)) {
             drawer_layout.closeDrawer(GravityCompat.START)
         } else {
             super.onBackPressed()
@@ -106,6 +111,9 @@ class DashBoardActivity : AppCompatActivity(), SearchView.OnQueryTextListener, N
     }
 
     override fun onQueryTextSubmit(query: String?): Boolean {
+        if (!searchView?.isIconified!!) {
+            searchView?.isIconified = true
+        }
         query?.let { SearchActivity.launch(this, it) }
         return true
     }
@@ -117,25 +125,25 @@ class DashBoardActivity : AppCompatActivity(), SearchView.OnQueryTextListener, N
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         // Handle navigation view item clicks here.
         when (item.itemId) {
-            R.id.nav_watchlist -> {
-                // Handle the camera action
-                Toast.makeText(this, "Coming Soon", Toast.LENGTH_LONG).show()
-            }
-            R.id.nav_favourites -> {
-                Toast.makeText(this, "Coming Soon", Toast.LENGTH_LONG).show()
-            }
-            R.id.nav_rated -> {
-                Toast.makeText(this, "Coming Soon", Toast.LENGTH_LONG).show()
-            }
-            R.id.nav_login -> {
-                LoginActivity.launch(this)
-            }
-            R.id.nav_discover_movies -> {
-                Toast.makeText(this, "Coming Soon", Toast.LENGTH_LONG).show()
-            }
-            R.id.nav_discover_tv_shows -> {
-                Toast.makeText(this, "Coming Soon", Toast.LENGTH_LONG).show()
-            }
+//            R.id.nav_watchlist -> {
+//                // Handle the camera action
+//                Toast.makeText(this, "Coming Soon", Toast.LENGTH_LONG).show()
+//            }
+//            R.id.nav_favourites -> {
+//                Toast.makeText(this, "Coming Soon", Toast.LENGTH_LONG).show()
+//            }
+//            R.id.nav_rated -> {
+//                Toast.makeText(this, "Coming Soon", Toast.LENGTH_LONG).show()
+//            }
+//            R.id.nav_login -> {
+//                LoginActivity.launch(this)
+//            }
+//            R.id.nav_discover_movies -> {
+//                Toast.makeText(this, "Coming Soon", Toast.LENGTH_LONG).show()
+//            }
+//            R.id.nav_discover_tv_shows -> {
+//                Toast.makeText(this, "Coming Soon", Toast.LENGTH_LONG).show()
+//            }
             R.id.nav_genre -> {
                 GenresActivity.launch(this)
             }

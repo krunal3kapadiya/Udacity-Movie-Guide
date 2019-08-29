@@ -7,7 +7,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.GridLayoutManager
-import android.widget.Toast
 import com.krunal3kapadiya.popularmovies.R
 import kotlinx.android.synthetic.main.activity_genres.*
 
@@ -24,8 +23,8 @@ class GenresActivity : AppCompatActivity() {
         setContentView(R.layout.activity_genres)
         val viewModel = ViewModelProviders.of(this).get(GenresViewModel::class.java)
         val adapter = GeneresListAdapter(object : GeneresListAdapter.OnItemClick {
-            override fun onItemClick(pos: Int) {
-                Toast.makeText(applicationContext, "Coming Soon", Toast.LENGTH_LONG).show()
+            override fun onItemClick(genres: Genres) {
+                GenreDetailActivity.launch(this@GenresActivity, genres)
             }
         })
         listGenres.layoutManager = GridLayoutManager(this, 2)

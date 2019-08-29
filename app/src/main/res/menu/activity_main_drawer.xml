@@ -4,64 +4,61 @@
     tools:showIn="navigation_view">
 
     <group android:checkableBehavior="single">
+        <!--        <item-->
+        <!--            android:id="@+id/nav_watchlist"-->
+        <!--            android:icon="@drawable/ic_menu_send"-->
+        <!--            android:title="WatchList" />-->
+        <!--        <item-->
+        <!--            android:id="@+id/nav_favourites"-->
+        <!--            android:icon="@drawable/ic_menu_send"-->
+        <!--            android:title="Favorites (Account)" />-->
+        <!--        <item-->
+        <!--            android:id="@+id/nav_rated"-->
+        <!--            android:icon="@drawable/ic_menu_send"-->
+        <!--            android:title="Rated" />-->
+        <!--        <item-->
+        <!--            android:id="@+id/nav_login"-->
+        <!--            android:icon="@drawable/ic_menu_send"-->
+        <!--            android:title="Login" />-->
+
         <item
-            android:id="@+id/nav_watchlist"
+            android:id="@+id/nav_genre"
             android:icon="@drawable/ic_menu_send"
-            android:title="WatchList" />
+            android:title="Genre" />
         <item
-            android:id="@+id/nav_favourites"
+            android:id="@+id/nav_favourites_device"
             android:icon="@drawable/ic_menu_send"
-            android:title="Favorites (Account)" />
+            android:title="Favourites (Device)" />
         <item
-            android:id="@+id/nav_rated"
+            android:id="@+id/nav_about"
             android:icon="@drawable/ic_menu_send"
-            android:title="Rated" />
+            android:title="About" />
         <item
-            android:id="@+id/nav_login"
+            android:id="@+id/nav_share"
             android:icon="@drawable/ic_menu_send"
-            android:title="Login" />
+            android:title="Share" />
+        <item
+            android:id="@+id/nav_rate"
+            android:icon="@drawable/ic_menu_send"
+            android:title="Rate" />
+        <item
+            android:id="@+id/nav_apps"
+            android:icon="@drawable/ic_menu_send"
+            android:title="Apps" />
     </group>
 
-    <item android:title="Communicate">
-        <menu>
-            <item
-                android:id="@+id/nav_discover_movies"
-                android:icon="@drawable/ic_menu_send"
-                android:title="Discover Movies" />
-            <item
-                android:id="@+id/nav_discover_tv_shows"
-                android:icon="@drawable/ic_menu_send"
-                android:title="Discover TV Shows" />
-            <item
-                android:id="@+id/nav_genre"
-                android:icon="@drawable/ic_menu_send"
-                android:title="Genre" />
-            <item
-                android:id="@+id/nav_favourites_device"
-                android:icon="@drawable/ic_menu_send"
-                android:title="Favourites (Device)" />
-        </menu>
-    </item>
+    <group android:checkableBehavior="single">
+        <!--        <menu>-->
+        <!--            <item-->
+        <!--                android:id="@+id/nav_discover_movies"-->
+        <!--                android:icon="@drawable/ic_menu_send"-->
+        <!--                android:title="Discover Movies" />-->
+        <!--            <item-->
+        <!--                android:id="@+id/nav_discover_tv_shows"-->
+        <!--                android:icon="@drawable/ic_menu_send"-->
+        <!--                android:title="Discover TV Shows" />-->
 
-    <item android:title="Communicate">
-        <menu>
-            <item
-                android:id="@+id/nav_about"
-                android:icon="@drawable/ic_menu_send"
-                android:title="About" />
-            <item
-                android:id="@+id/nav_share"
-                android:icon="@drawable/ic_menu_send"
-                android:title="Share" />
-            <item
-                android:id="@+id/nav_rate"
-                android:icon="@drawable/ic_menu_send"
-                android:title="Rate" />
-            <item
-                android:id="@+id/nav_apps"
-                android:icon="@drawable/ic_menu_send"
-                android:title="Apps" />
-        </menu>
-    </item>
+        <!--        </menu>-->
+    </group>
 
 </menu>

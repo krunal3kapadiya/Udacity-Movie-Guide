@@ -1,26 +1,32 @@
 package com.krunal3kapadiya.popularmovies.data.adapter
 
-import android.support.v4.content.ContextCompat
+import android.content.Context
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import com.bumptech.glide.Glide
 import com.krunal3kapadiya.popularmovies.Constants
 import com.krunal3kapadiya.popularmovies.R
-import com.krunal3kapadiya.popularmovies.data.model.Movies
+import com.krunal3kapadiya.popularmovies.data.model.SearchResponse
+import com.krunal3kapadiya.popularmovies.data.model.SearchResult
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.row_movies.view.*
 
-class MovieRVAdapter(
-        listener: OnItemClick
-) : RecyclerView.Adapter<MovieRVAdapter.ViewHolder>() {
-    private val mOnItemClick: OnItemClick = listener
-    private val mMovieArrayList: ArrayList<Movies> = ArrayList()
+class SearchAdapter(
+        private val mContext: Context,
+        private val listener: OnItemClick
+) : RecyclerView.Adapter<SearchAdapter.ViewHolder>() {
+    private val mOnItemClick: OnItemClick
+    private val context: Context
+    private val mMovieArrayList: ArrayList<SearchResult> = ArrayList()
 
     init {
+        context = mContext
+        mOnItemClick = listener
         setHasStableIds(true)
+
+
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -38,7 +44,16 @@ class MovieRVAdapter(
             position: Int
     ) {
         holder.bind(mMovieArrayList)
+//        ViewCompat.setTransitionName(holder.itemView, mMovieArrayList[position].name)
+//        setFadeAnimation(holder.itemView)
     }
+
+    /*private fun setFadeAnimation(view: View) {
+        val anim = AlphaAnimation(0.0f, 1.0f)
+        anim.duration = 1000
+        view.startAnimation(anim)
+    }*/
+
 
     override fun getItemCount(): Int {
         return mMovieArrayList.size
@@ -53,17 +68,7 @@ class MovieRVAdapter(
     }
 
 
-    fun setData(it: ArrayList<Movies>?) {
-        mMovieArrayList.clear()
-        if (it != null) {
-            for (movies in it) {
-                mMovieArrayList.add(movies)
-            }
-        }
-        notifyDataSetChanged()
-    }
-
-    fun addData(it: ArrayList<Movies>?) {
+    fun setData(it: List<SearchResult>?) {
         mMovieArrayList.clear()
         if (it != null) {
             for (movies in it) {
@@ -74,19 +79,19 @@ class MovieRVAdapter(
     }
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        fun bind(mMovieArrayList: List<Movies>) {
+        fun bind(mMovieArrayList: List<SearchResult>) {
             with(mMovieArrayList) {
-                Picasso.with(itemView.context)
-                        .load(Constants.BASE_IMAGE_URL + Constants.POSTER_SIZE + mMovieArrayList[position].url)
+                Picasso.with(mContext)
+                        .load(Constants.BASE_IMAGE_URL + Constants.POSTER_SIZE + mMovieArrayList[position].posterPath)
 //                        .placeholder(R.mipmap.ic_movie)
                         .into(itemView.img_movie_row)
-                itemView.tv_movie_title.text = mMovieArrayList[position].name
+
                 itemView.img_movie_row.setOnClickListener { mOnItemClick.onItemClick(adapterPosition, itemView.img_movie_row, mMovieArrayList[adapterPosition]) }
             }
         }
     }
 
     interface OnItemClick {
-        fun onItemClick(pos: Int, view: ImageView?, movies: Movies)
+        fun onItemClick(pos: Int, view: ImageView?, movies: SearchResult)
     }
 }

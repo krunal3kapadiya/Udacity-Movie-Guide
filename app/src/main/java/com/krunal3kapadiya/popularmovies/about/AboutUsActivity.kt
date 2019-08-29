@@ -25,6 +25,7 @@ class AboutUsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_about)
+        supportActionBar?.elevation = 0F
         about_txt.text = getString(R.string.about_website)
 //        BundledEmojiCompatConfig(this)
 //                .apply {

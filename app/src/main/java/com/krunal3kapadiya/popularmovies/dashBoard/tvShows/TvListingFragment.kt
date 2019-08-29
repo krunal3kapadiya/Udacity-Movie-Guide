@@ -13,9 +13,7 @@ import android.widget.ImageView
 import com.krunal3kapadiya.popularmovies.MovieDetailActivity
 import com.krunal3kapadiya.popularmovies.R
 import com.krunal3kapadiya.popularmovies.TVDetailActivity
-import com.krunal3kapadiya.popularmovies.data.adapter.MovieRVAdapter
 import com.krunal3kapadiya.popularmovies.data.adapter.TVRVAdapter
-import com.krunal3kapadiya.popularmovies.data.model.Movies
 import com.krunal3kapadiya.popularmovies.data.model.Result
 import kotlinx.android.synthetic.main.fragment_now_playing.*
 
@@ -46,7 +44,7 @@ class TvListingFragment : Fragment(), TVRVAdapter.OnItemClick {
         super.onViewCreated(view, savedInstanceState)
         val viewModel = ViewModelProviders.of(this).get(TvViewModel::class.java)
 
-        var SPAN = 2
+        var SPAN = 3
 
         if (resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
             SPAN = 4
@@ -61,7 +59,5 @@ class TvListingFragment : Fragment(), TVRVAdapter.OnItemClick {
         viewModel.movieArrayList.observe(this, android.arch.lifecycle.Observer {
             mAdapter!!.setData(it)
         })
-
-
     }
 }

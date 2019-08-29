@@ -42,12 +42,12 @@ class GeneresListAdapter(private val listener: OnItemClick) : RecyclerView.Adapt
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun bind(mGenresArrayList: List<Genres>) {
             itemView.row_generes_title.text = mGenresArrayList[adapterPosition].name
-            itemView.setOnClickListener { mOnItemClick.onItemClick(adapterPosition) }
+            itemView.setOnClickListener { mOnItemClick.onItemClick(mGenresArrayList[adapterPosition]) }
         }
     }
 
     interface OnItemClick {
-        fun onItemClick(pos: Int)
+        fun onItemClick(genres: Genres)
     }
 
 }
