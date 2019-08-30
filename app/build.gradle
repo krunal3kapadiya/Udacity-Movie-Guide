@@ -69,7 +69,7 @@ static def getApiKey() {
 }
 
 dependencies {
-    implementation 'com.squareup.picasso:picasso:2.5.2'
+//    implementation 'com.squareup.picasso:picasso:2.5.2'
 //    implementation deps.kotlin.stdlib
     implementation deps.support.constraint
     implementation 'com.android.support:palette-v7:26.0.0-alpha1'
@@ -104,8 +104,8 @@ dependencies {
 //    kapt deps.google.daggerProcessor
     api deps.google.gson
 
-    api deps.square.picasso
-    api deps.square.okhttpDownloader
+//    api deps.square.picasso
+//    api deps.square.okhttpDownloader
 
     api deps.square.retrofit
     api deps.square.okhttp

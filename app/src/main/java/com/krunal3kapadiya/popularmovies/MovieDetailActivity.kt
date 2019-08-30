@@ -21,6 +21,8 @@ import android.view.MenuItem
 import android.view.View
 import android.view.WindowManager
 import com.bumptech.glide.Glide
+import com.bumptech.glide.request.target.CustomTarget
+import com.bumptech.glide.request.transition.Transition
 import com.krunal3kapadiya.popularmovies.data.adapter.ReviewRVAdapter
 import com.krunal3kapadiya.popularmovies.data.adapter.TrailerRVAdapter
 import com.krunal3kapadiya.popularmovies.data.api.MovieApi
@@ -28,8 +30,6 @@ import com.krunal3kapadiya.popularmovies.data.api.MovieApiClient
 import com.krunal3kapadiya.popularmovies.data.model.Movies
 import com.krunal3kapadiya.popularmovies.data.model.Reviews
 import com.krunal3kapadiya.popularmovies.data.model.Trailer
-import com.squareup.picasso.Picasso
-import com.squareup.picasso.Target
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_movie_detail.*
@@ -54,26 +54,21 @@ class MovieDetailActivity(private var isFavorite: Boolean = false) : AppCompatAc
 
         mContext = this@MovieDetailActivity
 
-        Picasso.with(this)
+        Glide.with(this)
+                .asBitmap()
                 .load(Constants.BASE_IMAGE_URL + Constants.POSTER_SIZE_500 + movieItem.url)
                 .placeholder(R.mipmap.ic_movie)
-                .into(object : Target {
-                    override fun onBitmapLoaded(bitmap: Bitmap, from: Picasso.LoadedFrom) {
-                        mBitmap = bitmap
-                        val palette = Palette.from(bitmap).generate()
+                .into(object : CustomTarget<Bitmap>() {
+                    override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
+                        mBitmap = resource
+                        val palette = Palette.from(resource).generate()
                         themeLightColor = palette.getDominantColor(ContextCompat.getColor(mContext!!, R.color.colorAccent))
                         themeDarkColor = palette.getDarkVibrantColor(ContextCompat.getColor(mContext!!, R.color.colorAccent))
                     }
 
-                    override fun onBitmapFailed(errorDrawable: Drawable) {
-
-                    }
-
-                    override fun onPrepareLoad(placeHolderDrawable: Drawable) {
-
+                    override fun onLoadCleared(placeholder: Drawable?) {
                     }
                 })
-
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             val window = window

@@ -5,9 +5,9 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.bumptech.glide.Glide
 import com.krunal3kapadiya.popularmovies.R
 import com.krunal3kapadiya.popularmovies.data.model.Trailer
-import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.row_trailer.view.*
 import java.util.*
 
@@ -34,7 +34,7 @@ class TrailerRVAdapter(private val mContext: Context, private val mTrailerList: 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun bind(mTrailerList: ArrayList<Trailer>) {
             with(mTrailerList) {
-                Picasso.with(mContext)
+                Glide.with(mContext)
                         .load(mContext.getString(R.string.youtube_image, mTrailerList[position].key))
                         .into(itemView.row_trailer_thumb)
             }

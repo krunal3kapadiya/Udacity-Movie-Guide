@@ -10,11 +10,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.target.CustomTarget
+import com.bumptech.glide.request.transition.Transition
 import com.krunal3kapadiya.popularmovies.Constants
 import com.krunal3kapadiya.popularmovies.R
+import com.krunal3kapadiya.popularmovies.data.model.Movies
 import com.krunal3kapadiya.popularmovies.data.model.Result
-import com.squareup.picasso.Picasso
-import com.squareup.picasso.Target
 import kotlinx.android.synthetic.main.row_movies.view.*
 
 class TVRVAdapter(
@@ -75,9 +77,14 @@ class TVRVAdapter(
     fun setData(it: List<Result>?) {
         mMovieArrayList.clear()
         if (it != null) {
-            for (movies in it) {
-                mMovieArrayList.add(movies)
-            }
+            mMovieArrayList.addAll(it)
+        }
+        notifyDataSetChanged()
+    }
+
+    fun addData(it: List<Result>?) {
+        if (it != null) {
+            mMovieArrayList.addAll(it)
         }
         notifyDataSetChanged()
     }
@@ -85,25 +92,22 @@ class TVRVAdapter(
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun bind(mMovieArrayList: List<Result>) {
             with(mMovieArrayList) {
-                Picasso.with(itemView.context)
+                Glide.with(itemView.context)
+                        .asBitmap()
                         .load(Constants.BASE_IMAGE_URL + Constants.POSTER_SIZE_500 + mMovieArrayList[position].posterPath)
                         .placeholder(R.mipmap.ic_movie)
-                        .into(object : Target {
-                            override fun onBitmapLoaded(bitmap: Bitmap, from: Picasso.LoadedFrom) {
-//                                mBitmap = bitmap
-                                itemView.img_movie_row.setImageBitmap(bitmap)
-                                val palette = Palette.from(bitmap).generate()
+
+                        .into(object : CustomTarget<Bitmap>() {
+                            override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
+                                itemView.img_movie_row.setImageBitmap(resource)
+                                val palette = Palette.from(resource).generate()
                                 val themeLightColor = palette.getDominantColor(ContextCompat.getColor(itemView.context!!, R.color.colorAccent))
                                 val themeDarkColor = palette.getDarkVibrantColor(ContextCompat.getColor(itemView.context!!, R.color.colorAccent))
                                 itemView.tv_movie_title.setBackgroundColor(themeLightColor)
-                            }
-
-                            override fun onBitmapFailed(errorDrawable: Drawable) {
 
                             }
 
-                            override fun onPrepareLoad(placeHolderDrawable: Drawable) {
-
+                            override fun onLoadCleared(placeholder: Drawable?) {
                             }
                         })
                 itemView.tv_movie_title.text = mMovieArrayList[adapterPosition].name

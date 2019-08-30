@@ -68,7 +68,6 @@ class MovieRVAdapter(
     }
 
     fun addData(it: ArrayList<Movies>?) {
-        mMovieArrayList.clear()
         if (it != null) {
             for (movies in it) {
                 mMovieArrayList.add(movies)

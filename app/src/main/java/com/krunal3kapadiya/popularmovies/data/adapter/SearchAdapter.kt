@@ -6,11 +6,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import com.bumptech.glide.Glide
 import com.krunal3kapadiya.popularmovies.Constants
 import com.krunal3kapadiya.popularmovies.R
-import com.krunal3kapadiya.popularmovies.data.model.SearchResponse
 import com.krunal3kapadiya.popularmovies.data.model.SearchResult
-import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.row_movies.view.*
 
 class SearchAdapter(
@@ -81,7 +80,7 @@ class SearchAdapter(
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun bind(mMovieArrayList: List<SearchResult>) {
             with(mMovieArrayList) {
-                Picasso.with(mContext)
+                Glide.with(mContext)
                         .load(Constants.BASE_IMAGE_URL + Constants.POSTER_SIZE + mMovieArrayList[position].posterPath)
 //                        .placeholder(R.mipmap.ic_movie)
                         .into(itemView.img_movie_row)

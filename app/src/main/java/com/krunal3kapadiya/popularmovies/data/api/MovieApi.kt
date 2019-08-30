@@ -71,12 +71,12 @@ internal interface MovieApi {
     @GET("search/person")
     fun searchPerson(@Query("api_key") apiKey: String,
                      @Query("query") query: String,
-                     @Query("page") page: Int): Observable<MovieResponse>
+                     @Query("page") page: Int): Observable<ActorsResponse>
 
-    @GET("/search/tv")
+    @GET("search/tv")
     fun searchTVShows(@Query("api_key") apiKey: String,
                       @Query("query") query: String,
-                      @Query("page") page: Int): Observable<MovieResponse>
+                      @Query("page") page: Int): Observable<TVResponse>
 
     @GET("movie/upcoming")
     fun getUpComingMovies(@Query("api_key") apiKey: String): Observable<MovieResponse>

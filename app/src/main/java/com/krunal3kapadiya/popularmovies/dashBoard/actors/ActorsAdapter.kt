@@ -6,17 +6,17 @@ import android.support.v4.content.ContextCompat
 import android.support.v7.graphics.Palette
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
-import android.view.OrientationEventListener
 import android.view.View
 import android.view.ViewGroup
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.target.CustomTarget
+import com.bumptech.glide.request.transition.Transition
 import com.krunal3kapadiya.popularmovies.Constants
 import com.krunal3kapadiya.popularmovies.R
-import com.squareup.picasso.Picasso
-import com.squareup.picasso.Target
 import kotlinx.android.synthetic.main.row_movies.view.*
 
 class ActorsAdapter(listener: OnActorClickListener) : RecyclerView.Adapter<ActorsAdapter.ViewHolder>() {
-    var actorsList: List<Result>? = emptyList()
+    private var actorsList: ArrayList<Result>? = ArrayList()
     val clickListener = listener
 
 
@@ -48,18 +48,28 @@ class ActorsAdapter(listener: OnActorClickListener) : RecyclerView.Adapter<Actor
     }
 
     fun setData(actorsResults: List<Result>?) {
-        actorsList = actorsResults
+        actorsList?.clear()
+        if (actorsResults != null) {
+            actorsList?.addAll(actorsResults)
+        }
+        notifyDataSetChanged()
+    }
+
+    fun addData(it: List<Result>?) {
+        if (it != null) {
+            actorsList?.addAll(it)
+        }
         notifyDataSetChanged()
     }
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         fun bind(result: Result) {
-            Picasso.with(itemView.context)
+            Glide.with(itemView.context)
+                    .asBitmap()
                     .load(Constants.BASE_IMAGE_URL + Constants.POSTER_SIZE_500 + result.profilePath)
                     .placeholder(R.mipmap.ic_movie)
-                    .into(object : Target {
-                        override fun onBitmapLoaded(bitmap: Bitmap, from: Picasso.LoadedFrom) {
-//                                mBitmap = bitmap
+                    .into(object : CustomTarget<Bitmap>() {
+                        override fun onResourceReady(bitmap: Bitmap, transition: Transition<in Bitmap>?) {
                             itemView.img_movie_row.setImageBitmap(bitmap)
                             val palette = Palette.from(bitmap).generate()
                             val themeLightColor = palette.getDominantColor(ContextCompat.getColor(itemView.context!!, R.color.colorAccent))
@@ -67,12 +77,7 @@ class ActorsAdapter(listener: OnActorClickListener) : RecyclerView.Adapter<Actor
                             itemView.tv_movie_title.setBackgroundColor(themeLightColor)
                         }
 
-                        override fun onBitmapFailed(errorDrawable: Drawable) {
-
-                        }
-
-                        override fun onPrepareLoad(placeHolderDrawable: Drawable) {
-
+                        override fun onLoadCleared(placeholder: Drawable?) {
                         }
                     })
             itemView.tv_movie_title.text = result.name

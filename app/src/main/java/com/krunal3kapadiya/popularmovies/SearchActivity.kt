@@ -10,11 +10,13 @@ import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.widget.ImageView
+import com.krunal3kapadiya.popularmovies.dashBoard.actors.ActorsAdapter
+import com.krunal3kapadiya.popularmovies.dashBoard.actors.ActorsDetailActivity
 import com.krunal3kapadiya.popularmovies.data.adapter.MovieRVAdapter
+import com.krunal3kapadiya.popularmovies.data.adapter.TVRVAdapter
 import com.krunal3kapadiya.popularmovies.data.model.Movies
+import com.krunal3kapadiya.popularmovies.data.model.Result
 import kotlinx.android.synthetic.main.activity_search.*
-import android.support.v4.content.ContextCompat.getSystemService
-import android.icu.lang.UCharacter.GraphemeClusterBreak.T
 
 
 class SearchActivity : AppCompatActivity() {
@@ -47,21 +49,49 @@ class SearchActivity : AppCompatActivity() {
         })
 
 
+        val tvAdapter = TVRVAdapter(this@SearchActivity, object : TVRVAdapter.OnItemClick {
+            override fun onItemClick(pos: Int, view: ImageView?, movies: Result) {
+                val intent = Intent(this@SearchActivity, TVDetailActivity::class.java)
+                intent.putExtra(MovieDetailActivity.ARG_MOVIE, movies)
+                startActivity(intent)
+            }
+
+        })
+
+        val mActorAdapter = ActorsAdapter(object : ActorsAdapter.OnActorClickListener {
+            override fun onActorClick(result: com.krunal3kapadiya.popularmovies.dashBoard.actors.Result) {
+                ActorsDetailActivity.launch(this@SearchActivity, result.id)
+            }
+        })
+
+
 //                SearchAdapter(this, object : SearchAdapter.OnItemClick {
 //            override fun onItemClick(pos: Int, view: ImageView?, movies: SearchResult) {
 //                Toast.makeText(applicationContext, "Coming soon..", Toast.LENGTH_LONG).show()
 //            }
 //        })
 
-        search_rv.adapter = mAdapter
-        loadNextDataFromApi(mAdapter, 1)
+        when (intent.getIntExtra("tabPosition", 0)) {
+            0 -> {
+                search_rv.adapter = mAdapter
+            }
+            1 -> {
+                search_rv.adapter = tvAdapter
+            }
+            2 -> {
+                search_rv.adapter = mActorAdapter
+            }
+        }
+
+
+        loadNextDataFromApi(mAdapter, tvAdapter, mActorAdapter, 1)
         scrollListener = object : EndlessRecyclerViewScrollListener(layoutManager) {
             override fun onLoadMore(page: Int, totalItemsCount: Int, view: RecyclerView) {
                 // Triggered only when new data needs to be appended to the list
                 // Add whatever code is needed to append new items to the bottom of the list
                 Log.d("SCROLLVIEW_LOADED", "SCROLLED ".plus(page).plus(" ").plus(totalItemsCount))
                 val nextPage = page + 1
-                loadNextDataFromApi(mAdapter, nextPage)
+                loadNextDataFromApi(mAdapter, tvAdapter, mActorAdapter, nextPage)
             }
         }
         // Adds the scroll listener to RecyclerView
@@ -78,15 +108,30 @@ class SearchActivity : AppCompatActivity() {
 //        }
     }
 
-    private fun loadNextDataFromApi(adapter: MovieRVAdapter, page: Int) {
+    private fun loadNextDataFromApi(adapter: MovieRVAdapter,
+                                    tvAdapter: TVRVAdapter,
+                                    actorAdapter: ActorsAdapter,
+                                    page: Int) {
         val viewModel = ViewModelProviders.of(this).get(SearchViewModel::class.java)
+        val tabPosition = intent.getIntExtra("tabPosition", 0)
         viewModel.searchMovies(intent.getStringExtra("searchString"),
                 intent.getIntExtra("tabPosition", 0),
                 page)
-                .observe(this, Observer {
-                    //TODO check for null values
-                    adapter.addData(it?.results)
+        when (tabPosition) {
+            0 -> viewModel.searchMovie.observe(this, Observer {
+                adapter.addData(it?.results)
+            })
+            1 -> {
+                viewModel.searchTV.observe(this, Observer {
+                    tvAdapter.addData(it?.results)
                 })
+            }
+            2 -> {
+                viewModel.searchActor.observe(this, Observer {
+                    actorAdapter.addData(it?.result)
+                })
+            }
+        }
 
     }
 }
