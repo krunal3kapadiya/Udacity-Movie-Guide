@@ -43,12 +43,12 @@ class TvListingFragment : Fragment(), TVRVAdapter.OnItemClick {
     lateinit var viewModel: TvViewModel
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val viewModel = ViewModelProviders.of(this).get(TvViewModel::class.java)
+        viewModel = ViewModelProviders.of(this).get(TvViewModel::class.java)
         val layoutManager = GridLayoutManager(context, Constants.SPAN_RECYCLER_VIEW)
         rv_list_movie_main.layoutManager = layoutManager
         mAdapter = TVRVAdapter(context!!, this)
         rv_list_movie_main.adapter = mAdapter
-
+        loadNextDataFromApi(mAdapter!!, 1)
         scrollListener = object : EndlessRecyclerViewScrollListener(layoutManager) {
             override fun onLoadMore(page: Int, totalItemsCount: Int, view: RecyclerView) {
                 // Triggered only when new data needs to be appended to the list

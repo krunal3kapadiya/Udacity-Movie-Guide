@@ -21,7 +21,6 @@ import com.krunal3kapadiya.popularmovies.dashBoard.actors.ActorsFragment
 import com.krunal3kapadiya.popularmovies.dashBoard.movies.MoviesFragment
 import com.krunal3kapadiya.popularmovies.dashBoard.tvShows.TvShowsFragment
 import com.krunal3kapadiya.popularmovies.genres.GenresActivity
-import com.krunal3kapadiya.popularmovies.login.LoginActivity
 import kotlinx.android.synthetic.main.activity_dashboard.*
 import kotlinx.android.synthetic.main.app_bar_main.*
 import kotlinx.android.synthetic.main.content_main.*

@@ -26,22 +26,22 @@ class MoviesViewModel : ViewModel() {
     val mCastArrayList = MediatorLiveData<List<Cast>>()
 
 
-    fun getPopularMovieList(number: Int?) {
+    fun getPopularMovieList(number: Int?, page: Int) {
         val movieClient = MovieApiClient.client!!
                 .create(MovieApi::class.java)
         var getPopMovie: Observable<MovieResponse>? = null
         when (number) {
             1 -> {
-                getPopMovie = movieClient.getNowPlayingMovies(BuildConfig.TMDB_API_KEY)
+                getPopMovie = movieClient.getNowPlayingMovies(page, BuildConfig.TMDB_API_KEY)
             }
             2 -> {
-                getPopMovie = movieClient.getPopularMoviesList(BuildConfig.TMDB_API_KEY)
+                getPopMovie = movieClient.getPopularMoviesList(page,BuildConfig.TMDB_API_KEY)
             }
             3 -> {
-                getPopMovie = movieClient.getUpComingMovies(BuildConfig.TMDB_API_KEY)
+                getPopMovie = movieClient.getUpComingMovies(page,BuildConfig.TMDB_API_KEY)
             }
             4 -> {
-                getPopMovie = movieClient.getTopRatedMovies(BuildConfig.TMDB_API_KEY)
+                getPopMovie = movieClient.getTopRatedMovies(page,BuildConfig.TMDB_API_KEY)
             }
             5 -> {
 //                getPopMovie = movieClient.getMovieByYear(BuildConfig.TMDB_API_KEY)

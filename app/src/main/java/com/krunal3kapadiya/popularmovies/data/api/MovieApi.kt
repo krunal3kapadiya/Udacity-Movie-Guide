@@ -48,10 +48,10 @@ internal interface MovieApi {
     Movies List
     ---*/
     @GET("movie/top_rated")
-    fun getTopRatedMovies(@Query("api_key") apiKey: String): Observable<MovieResponse>
+    fun getTopRatedMovies(@Query("page") page: Int, @Query("api_key") apiKey: String): Observable<MovieResponse>
 
     @GET("movie/popular")
-    fun getPopularMoviesList(@Query("api_key") apiKey: String): Observable<MovieResponse>
+    fun getPopularMoviesList(@Query("page") page: Int, @Query("api_key") apiKey: String): Observable<MovieResponse>
 
     @GET("movie/{id}/videos")
     fun getMovieTrailers(@Path("id") id: Long, @Query("api_key") apiKey: String): Observable<TrailerResponse>
@@ -60,7 +60,7 @@ internal interface MovieApi {
     fun getMovieReviews(@Path("id") id: Long, @Query("api_key") apiKey: String): Observable<ReviewsResponse>
 
     @GET("movie/now_playing")
-    fun getNowPlayingMovies(@Query("api_key") apiKey: String): Observable<MovieResponse>
+    fun getNowPlayingMovies(@Query("page") page: Int, @Query("api_key") apiKey: String): Observable<MovieResponse>
 
     @GET("search/movie")
     fun searchMovie(@Query("api_key") apiKey: String,
@@ -79,7 +79,8 @@ internal interface MovieApi {
                       @Query("page") page: Int): Observable<TVResponse>
 
     @GET("movie/upcoming")
-    fun getUpComingMovies(@Query("api_key") apiKey: String): Observable<MovieResponse>
+    fun getUpComingMovies(@Query("page") page: Int,
+                          @Query("api_key") apiKey: String): Observable<MovieResponse>
 
     /*---
     TV List
@@ -113,7 +114,8 @@ internal interface MovieApi {
                       @Query("with_genres") with_genres: Int): Observable<MovieResponse>
 
     @GET("person/popular")
-    fun getActorsList(@Query("api_key") apiKey: String): Observable<ActorsResponse>
+    fun getActorsList(@Query("page") page: Int,
+                      @Query("api_key") apiKey: String): Observable<ActorsResponse>
 
     @GET("person/{person_id}")
     fun getActorsDetails(

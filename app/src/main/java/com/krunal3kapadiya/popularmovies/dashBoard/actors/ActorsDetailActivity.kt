@@ -44,7 +44,7 @@ class ActorsDetailActivity : AppCompatActivity() {
             actor_birthday.text = it?.placeOfBirth//
             actor_details.text = it?.biography
             Glide.with(this)
-                    .load(Constants.BASE_IMAGE_URL + Constants.POSTER_SIZE + it?.profilePath)
+                    .load(Constants.BASE_IMAGE_URL + Constants.POSTER_SIZE_500 + it?.profilePath)
                     .placeholder(R.mipmap.ic_movie)
                     .into(actor_image)
 

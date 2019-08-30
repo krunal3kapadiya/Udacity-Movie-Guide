@@ -13,11 +13,11 @@ import io.reactivex.schedulers.Schedulers
 
 class ActorsViewModel : ViewModel() {
 
-    fun getActorsList(): MediatorLiveData<List<Result>> {
+    fun getActorsList(page: Int): MediatorLiveData<List<Result>> {
         val movieArrayList = MediatorLiveData<List<Result>>()
         val movieClient = MovieApiClient.client!!
                 .create(MovieApi::class.java)
-        val genres: Observable<ActorsResponse>? = movieClient.getActorsList(BuildConfig.TMDB_API_KEY)
+        val genres: Observable<ActorsResponse>? = movieClient.getActorsList(page,BuildConfig.TMDB_API_KEY)
         genres?.subscribeOn(Schedulers.io())?.observeOn(AndroidSchedulers.mainThread())
                 ?.subscribe(
                         {
