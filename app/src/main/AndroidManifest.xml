@@ -20,7 +20,7 @@
         </activity>
         <activity
             android:name=".ViewImageActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
+            />
         <activity
             android:name=".MovieDetailActivity"
             android:theme="@style/AppTheme.NoActionBar">

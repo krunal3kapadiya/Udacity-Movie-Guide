@@ -18,7 +18,6 @@ import com.krunal3kapadiya.popularmovies.data.model.Movies
 import com.krunal3kapadiya.popularmovies.data.model.Result
 import kotlinx.android.synthetic.main.activity_search.*
 
-
 class SearchActivity : AppCompatActivity() {
 
     companion object {
@@ -63,13 +62,6 @@ class SearchActivity : AppCompatActivity() {
                 ActorsDetailActivity.launch(this@SearchActivity, result.id)
             }
         })
-
-
-//                SearchAdapter(this, object : SearchAdapter.OnItemClick {
-//            override fun onItemClick(pos: Int, view: ImageView?, movies: SearchResult) {
-//                Toast.makeText(applicationContext, "Coming soon..", Toast.LENGTH_LONG).show()
-//            }
-//        })
 
         when (intent.getIntExtra("tabPosition", 0)) {
             0 -> {
@@ -117,6 +109,9 @@ class SearchActivity : AppCompatActivity() {
         viewModel.searchMovies(intent.getStringExtra("searchString"),
                 intent.getIntExtra("tabPosition", 0),
                 page)
+
+        Log.d(SearchActivity::class.java.name, "Page ".plus(page))
+
         when (tabPosition) {
             0 -> viewModel.searchMovie.observe(this, Observer {
                 adapter.addData(it?.results)

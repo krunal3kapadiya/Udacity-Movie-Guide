@@ -4,11 +4,8 @@ import android.arch.lifecycle.MediatorLiveData
 import android.arch.lifecycle.ViewModel
 import android.util.Log
 import com.krunal3kapadiya.popularmovies.BuildConfig
-import com.krunal3kapadiya.popularmovies.Constants
 import com.krunal3kapadiya.popularmovies.data.api.MovieApi
 import com.krunal3kapadiya.popularmovies.data.api.MovieApiClient
-import com.krunal3kapadiya.popularmovies.data.model.MovieResponse
-import com.krunal3kapadiya.popularmovies.data.model.Movies
 import com.krunal3kapadiya.popularmovies.data.model.Result
 import com.krunal3kapadiya.popularmovies.data.model.TVResponse
 import io.reactivex.Observable
@@ -20,22 +17,22 @@ class TvViewModel : ViewModel() {
     val movieArrayList = MediatorLiveData<List<Result>>()
 
 
-    fun getPopularTvList(number: Int?) {
+    fun getPopularTvList(number: Int?, page: Int) {
         val movieClient = MovieApiClient.client!!
                 .create(MovieApi::class.java)
         var getTv: Observable<TVResponse>? = null
         when (number) {
             1 -> {
-                getTv = movieClient.tvAiringToday(BuildConfig.TMDB_API_KEY)
+                getTv = movieClient.tvAiringToday(page, BuildConfig.TMDB_API_KEY)
             }
             2 -> {
-                getTv = movieClient.tvOnAir(BuildConfig.TMDB_API_KEY)
+                getTv = movieClient.tvOnAir(page, BuildConfig.TMDB_API_KEY)
             }
             3 -> {
-                getTv = movieClient.tvPopular(BuildConfig.TMDB_API_KEY)
+                getTv = movieClient.tvPopular(page, BuildConfig.TMDB_API_KEY)
             }
             4 -> {
-                getTv = movieClient.tvTopRated(BuildConfig.TMDB_API_KEY)
+                getTv = movieClient.tvTopRated(page, BuildConfig.TMDB_API_KEY)
             }
         }
 

@@ -21,6 +21,7 @@ import android.view.WindowManager
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
+import com.krunal3kapadiya.popularmovies.MovieDetailActivity.Companion.ARG_MOVIE
 import com.krunal3kapadiya.popularmovies.data.adapter.ReviewRVAdapter
 import com.krunal3kapadiya.popularmovies.data.adapter.TrailerRVAdapter
 import com.krunal3kapadiya.popularmovies.data.api.MovieApi
@@ -45,6 +46,14 @@ class TVDetailActivity(private var isFavorite: Boolean = false) : AppCompatActiv
     private var themeLightColor: Int = 0
     private var themeDarkColor: Int = 0
     private var mBitmap: Bitmap? = null
+
+    companion object {
+        fun launch(context: Context, result: Result) {
+            val intent = Intent(context, TVDetailActivity::class.java)
+            intent.putExtra(ARG_MOVIE, result)
+            context.startActivity(intent)
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -226,10 +235,5 @@ class TVDetailActivity(private var isFavorite: Boolean = false) : AppCompatActiv
     override fun onReviewItemClick(position: Int) {
         val intent = Intent(Intent.ACTION_VIEW, Uri.parse(mReviewList!![position].reviewURL))
         startActivity(intent)
-    }
-
-    companion object {
-
-        var ARG_MOVIE = "movie"
     }
 }

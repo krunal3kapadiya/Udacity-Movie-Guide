@@ -8,6 +8,7 @@ import com.krunal3kapadiya.popularmovies.BuildConfig
 import com.krunal3kapadiya.popularmovies.Constants
 import com.krunal3kapadiya.popularmovies.data.api.MovieApiClient
 import com.krunal3kapadiya.popularmovies.data.api.MovieApi
+import com.krunal3kapadiya.popularmovies.data.model.Cast
 import com.krunal3kapadiya.popularmovies.data.model.MovieResponse
 import com.krunal3kapadiya.popularmovies.data.model.Movies
 import io.reactivex.Observable
@@ -22,6 +23,7 @@ class MoviesViewModel : ViewModel() {
 
     val errorMessage = MediatorLiveData<Boolean>()
     val movieArrayList = MediatorLiveData<ArrayList<Movies>>()
+    val mCastArrayList = MediatorLiveData<List<Cast>>()
 
 
     fun getPopularMovieList(number: Int?) {
@@ -50,6 +52,18 @@ class MoviesViewModel : ViewModel() {
         getPopMovie?.subscribeOn(Schedulers.io())?.observeOn(AndroidSchedulers.mainThread())
                 ?.subscribe({
                     it.results?.let { movieArrayList.postValue(it) }
+                }) {
+                    Log.e("MovieResponseException", it.message)
+                }
+    }
+
+    fun getCast(cast_id: Int) {
+        val movieClient = MovieApiClient.client!!
+                .create(MovieApi::class.java)
+        movieClient.getCastList(cast_id, BuildConfig.TMDB_API_KEY)
+                ?.subscribeOn(Schedulers.io())?.observeOn(AndroidSchedulers.mainThread())
+                ?.subscribe({
+                    it.cast?.let { mCastArrayList.postValue(it) }
                 }) {
                     Log.e("MovieResponseException", it.message)
                 }

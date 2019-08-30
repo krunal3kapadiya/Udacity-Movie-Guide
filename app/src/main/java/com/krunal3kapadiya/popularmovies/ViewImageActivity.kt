@@ -34,11 +34,11 @@ class ViewImageActivity : AppCompatActivity() {
             context.startActivity(intent)
         }
 
-        fun launch(context: Context, bitmap: Bitmap?) {
+        /*fun launch(context: Context, bitmap: Bitmap?) {
             val intent = Intent(context, ViewImageActivity::class.java)
             intent.putExtra("bitmap", bitmap)
             context.startActivity(intent)
-        }
+        }*/
     }
 
     lateinit var mBitmap: Bitmap

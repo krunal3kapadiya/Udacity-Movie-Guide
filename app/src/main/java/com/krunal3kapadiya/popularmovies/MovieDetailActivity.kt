@@ -1,5 +1,6 @@
 package com.krunal3kapadiya.popularmovies
 
+import android.arch.lifecycle.ViewModelProviders
 import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
@@ -23,16 +24,21 @@ import android.view.WindowManager
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
+import com.krunal3kapadiya.popularmovies.dashBoard.actors.ActorsDetailActivity
+import com.krunal3kapadiya.popularmovies.dashBoard.movies.MoviesViewModel
+import com.krunal3kapadiya.popularmovies.data.adapter.ActorsListAdapter
 import com.krunal3kapadiya.popularmovies.data.adapter.ReviewRVAdapter
 import com.krunal3kapadiya.popularmovies.data.adapter.TrailerRVAdapter
 import com.krunal3kapadiya.popularmovies.data.api.MovieApi
 import com.krunal3kapadiya.popularmovies.data.api.MovieApiClient
+import com.krunal3kapadiya.popularmovies.data.model.Cast
 import com.krunal3kapadiya.popularmovies.data.model.Movies
 import com.krunal3kapadiya.popularmovies.data.model.Reviews
 import com.krunal3kapadiya.popularmovies.data.model.Trailer
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_movie_detail.*
+import kotlinx.android.synthetic.main.row_casts.*
 import java.util.regex.Pattern
 
 class MovieDetailActivity(private var isFavorite: Boolean = false) : AppCompatActivity(), TrailerRVAdapter.OnItemClick, ReviewRVAdapter.OnReviewItemClick {
@@ -56,7 +62,7 @@ class MovieDetailActivity(private var isFavorite: Boolean = false) : AppCompatAc
 
         Glide.with(this)
                 .asBitmap()
-                .load(Constants.BASE_IMAGE_URL + Constants.POSTER_SIZE_500 + movieItem.url)
+                .load(Constants.BASE_IMAGE_URL + Constants.POSTER_SIZE + movieItem.url)
                 .placeholder(R.mipmap.ic_movie)
                 .into(object : CustomTarget<Bitmap>() {
                     override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
@@ -133,11 +139,28 @@ class MovieDetailActivity(private var isFavorite: Boolean = false) : AppCompatAc
         rv_movie_reviews!!.layoutManager = LinearLayoutManager(this)
         rv_movie_reviews!!.adapter = mReviewAdapter
 
-        img_movie_poster!!.setImageBitmap(mBitmap)
-        img_movie_poster.setOnClickListener { ViewImageActivity.launch(this, mBitmap) }
+        Glide.with(this)
+                .load(Constants.BASE_IMAGE_URL + Constants.POSTER_SIZE_500 + movieItem.url)
+                .into(img_movie_poster)
+
+        img_movie_poster.setOnClickListener { ViewImageActivity.launch(this, movieItem.url) }
         getReviewList()
         getTrailerList()
 
+        val moviesViewModel = ViewModelProviders.of(this).get(MoviesViewModel::class.java)
+        moviesViewModel.getCast(movieItem.id)
+
+        casts_view.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+        snapHelper.attachToRecyclerView(casts_view)
+        val actorsAdapter = ActorsListAdapter(object : ActorsListAdapter.OnItemClick {
+            override fun onItemClick(pos: Int, cast: Cast) {
+                ActorsDetailActivity.launch(this@MovieDetailActivity, cast.id)
+            }
+        })
+        casts_view.adapter = actorsAdapter
+        moviesViewModel.mCastArrayList.observe(this, android.arch.lifecycle.Observer {
+            actorsAdapter.setData(it)
+        })
 
         favorite_button!!.setOnClickListener {
             if (isFavorite) {
@@ -234,7 +257,6 @@ class MovieDetailActivity(private var isFavorite: Boolean = false) : AppCompatAc
     }
 
     companion object {
-
         var ARG_MOVIE = "movie"
     }
 }

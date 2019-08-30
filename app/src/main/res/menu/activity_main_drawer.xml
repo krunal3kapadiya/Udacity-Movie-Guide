@@ -23,27 +23,27 @@
 
         <item
             android:id="@+id/nav_genre"
-            android:icon="@drawable/ic_menu_send"
+            android:icon="@drawable/ic_genre_24dp"
             android:title="Genre" />
         <item
             android:id="@+id/nav_favourites_device"
-            android:icon="@drawable/ic_menu_send"
+            android:icon="@drawable/ic_favorite_black_24dp"
             android:title="Favourites (Device)" />
         <item
             android:id="@+id/nav_about"
-            android:icon="@drawable/ic_menu_send"
+            android:icon="@drawable/ic_about_black_24dp"
             android:title="About" />
         <item
             android:id="@+id/nav_share"
-            android:icon="@drawable/ic_menu_send"
+            android:icon="@drawable/ic_menu_share"
             android:title="Share" />
         <item
             android:id="@+id/nav_rate"
-            android:icon="@drawable/ic_menu_send"
+            android:icon="@drawable/ic_rate_black_24dp"
             android:title="Rate" />
         <item
             android:id="@+id/nav_apps"
-            android:icon="@drawable/ic_menu_send"
+            android:icon="@drawable/ic_android_apps_24dp"
             android:title="Apps" />
     </group>
 
