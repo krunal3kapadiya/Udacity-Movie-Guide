@@ -13,11 +13,12 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 
 class TvViewModel : ViewModel() {
-    val errorMessage = MediatorLiveData<Boolean>()
+    val errorMessage = MediatorLiveData<String>()
     val movieArrayList = MediatorLiveData<List<Result>>()
-
+    val isLoading = MediatorLiveData<Boolean>()
 
     fun getPopularTvList(number: Int?, page: Int) {
+        isLoading.postValue(true)
         val movieClient = MovieApiClient.client!!
                 .create(MovieApi::class.java)
         var getTv: Observable<TVResponse>? = null
@@ -39,9 +40,11 @@ class TvViewModel : ViewModel() {
         getTv?.subscribeOn(Schedulers.io())
                 ?.observeOn(AndroidSchedulers.mainThread())
                 ?.subscribe({
+                    isLoading.postValue(false)
                     it.results?.let { movieArrayList.postValue(it) }
                 }) {
-                    Log.e("MovieResponseException", it.message)
+                    isLoading.postValue(false)
+                    errorMessage.postValue(it.message)
                 }
     }
 }

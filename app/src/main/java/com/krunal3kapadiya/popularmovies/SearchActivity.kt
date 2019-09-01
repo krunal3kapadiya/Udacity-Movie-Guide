@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.util.Log
+import android.view.View
 import android.widget.ImageView
 import com.krunal3kapadiya.popularmovies.dashBoard.actors.ActorsAdapter
 import com.krunal3kapadiya.popularmovies.dashBoard.actors.ActorsDetailActivity
@@ -111,6 +112,16 @@ class SearchActivity : AppCompatActivity() {
                 page)
 
         Log.d(SearchActivity::class.java.name, "Page ".plus(page))
+
+        viewModel.isLoading.observe(this, android.arch.lifecycle.Observer {
+            if (it!!) {
+                pb_main.visibility = View.VISIBLE
+                search_rv.visibility = View.GONE
+            } else {
+                pb_main.visibility = View.GONE
+                search_rv.visibility = View.VISIBLE
+            }
+        })
 
         when (tabPosition) {
             0 -> viewModel.searchMovie.observe(this, Observer {

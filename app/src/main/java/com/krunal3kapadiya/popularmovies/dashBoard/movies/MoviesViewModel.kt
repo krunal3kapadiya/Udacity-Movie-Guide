@@ -21,12 +21,14 @@ import retrofit2.Response
 
 class MoviesViewModel : ViewModel() {
 
-    val errorMessage = MediatorLiveData<Boolean>()
+    val errorMessage = MediatorLiveData<String>()
     val movieArrayList = MediatorLiveData<ArrayList<Movies>>()
     val mCastArrayList = MediatorLiveData<List<Cast>>()
+    val isLoading = MediatorLiveData<Boolean>()
 
 
     fun getPopularMovieList(number: Int?, page: Int) {
+        isLoading.postValue(true)
         val movieClient = MovieApiClient.client!!
                 .create(MovieApi::class.java)
         var getPopMovie: Observable<MovieResponse>? = null
@@ -35,13 +37,13 @@ class MoviesViewModel : ViewModel() {
                 getPopMovie = movieClient.getNowPlayingMovies(page, BuildConfig.TMDB_API_KEY)
             }
             2 -> {
-                getPopMovie = movieClient.getPopularMoviesList(page,BuildConfig.TMDB_API_KEY)
+                getPopMovie = movieClient.getPopularMoviesList(page, BuildConfig.TMDB_API_KEY)
             }
             3 -> {
-                getPopMovie = movieClient.getUpComingMovies(page,BuildConfig.TMDB_API_KEY)
+                getPopMovie = movieClient.getUpComingMovies(page, BuildConfig.TMDB_API_KEY)
             }
             4 -> {
-                getPopMovie = movieClient.getTopRatedMovies(page,BuildConfig.TMDB_API_KEY)
+                getPopMovie = movieClient.getTopRatedMovies(page, BuildConfig.TMDB_API_KEY)
             }
             5 -> {
 //                getPopMovie = movieClient.getMovieByYear(BuildConfig.TMDB_API_KEY)
@@ -52,8 +54,11 @@ class MoviesViewModel : ViewModel() {
         getPopMovie?.subscribeOn(Schedulers.io())?.observeOn(AndroidSchedulers.mainThread())
                 ?.subscribe({
                     it.results?.let { movieArrayList.postValue(it) }
+                    isLoading.postValue(false)
                 }) {
+                    errorMessage.postValue(it.message)
                     Log.e("MovieResponseException", it.message)
+                    isLoading.postValue(false)
                 }
     }
 

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Popular Movies</string>
+    <string name="app_name">Cinemania</string>
     <string name="title_activity_movie_detail">MovieDetail</string>
     <string name="action_most_popular">Most Popular</string>
     <string name="action_highest_rated">Highest Rated</string>
@@ -34,4 +34,7 @@
     <string name="change_log">Change Log</string>
     <string name="author">Krunal Kapadiya</string>
     <string name="url_faq">https://krunal3kapadiya.app</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

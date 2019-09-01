@@ -21,9 +21,7 @@ class ActorsFragment : Fragment(), ActorsAdapter.OnActorClickListener {
     }
 
     companion object {
-        fun newInstance(): ActorsFragment {
-            return ActorsFragment()
-        }
+        fun newInstance() = ActorsFragment()
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -55,6 +53,16 @@ class ActorsFragment : Fragment(), ActorsAdapter.OnActorClickListener {
     }
 
     fun loadNextDataFromApi(adapter: ActorsAdapter, page: Int) {
+        viewModel.isLoading.observe(this, android.arch.lifecycle.Observer {
+            if (it!!) {
+                pb_main.visibility = View.VISIBLE
+                actorsList.visibility = View.GONE
+            } else {
+                pb_main.visibility = View.GONE
+                actorsList.visibility = View.VISIBLE
+            }
+        })
+
         viewModel.getActorsList(page).observe(this, Observer {
             adapter.setData(it)
         })

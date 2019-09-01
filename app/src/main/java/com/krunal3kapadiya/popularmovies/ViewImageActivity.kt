@@ -15,6 +15,7 @@ import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
@@ -33,21 +34,18 @@ class ViewImageActivity : AppCompatActivity() {
             intent.putExtra("string", url)
             context.startActivity(intent)
         }
-
-        /*fun launch(context: Context, bitmap: Bitmap?) {
-            val intent = Intent(context, ViewImageActivity::class.java)
-            intent.putExtra("bitmap", bitmap)
-            context.startActivity(intent)
-        }*/
     }
 
     lateinit var mBitmap: Bitmap
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_view_image)
+        supportActionBar?.title = ""
+
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
         val url = intent.getStringExtra("string")
         url?.let {
-
             Glide.with(this)
                     .asBitmap()
                     .load(Constants.BASE_IMAGE_URL + Constants.POSTER_SIZE + it)
@@ -68,13 +66,6 @@ class ViewImageActivity : AppCompatActivity() {
 
 
             Glide.with(this).load(Constants.BASE_IMAGE_URL + Constants.POSTER_SIZE_500 + it)
-                    .into(image_full_screen)
-        }
-
-        val bitmap = intent.getParcelableExtra<Bitmap>("bitmap")
-        bitmap?.let {
-            mBitmap = it
-            Glide.with(this).load(it)
                     .into(image_full_screen)
         }
     }
@@ -116,14 +107,10 @@ class ViewImageActivity : AppCompatActivity() {
                     startActivity(Intent.createChooser(intent, "Set as:"))
                 }
 
-
-
                 true
             }
             R.id.action_share_image -> {
                 // Share image call back
-                val bitmap = (image_full_screen.drawable as BitmapDrawable).bitmap
-//                shareBitmap(bitmap)
                 shareImage()
                 true
             }
@@ -134,12 +121,10 @@ class ViewImageActivity : AppCompatActivity() {
     fun shareImage() {
         val intent = Intent(Intent.ACTION_SEND)
         intent.type = "image/*"
-//        //TODO change file path
         val bitmap = (image_full_screen.drawable as BitmapDrawable).bitmap
         intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
         intent.putExtra(Intent.EXTRA_STREAM,
                 getImageUri(this, bitmap)
-//                FileProvider.getUriForFile(this, "$packageName.provider", "")
         )
         startActivity(Intent.createChooser(intent, "Share with..."))
     }
@@ -165,33 +150,35 @@ class ViewImageActivity : AppCompatActivity() {
         }
     }
 
-    private fun shareBitmap(bitmap: Bitmap) {
-
-        val shareText = " " + getString(R.string.app_name) + " developed by https://play.google.com/store/apps/details?id=" + packageName + ": \n\n"
-        try {
-            val file = File(this.externalCacheDir, "share.png")
-            val fOut = FileOutputStream(file)
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100, fOut)
-            fOut.flush()
-            fOut.close()
-            file.setReadable(true, false)
-            val intent = Intent(Intent.ACTION_SEND)
-            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-            intent.putExtra(Intent.EXTRA_TEXT, shareText)
-            intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(file))
-            intent.type = "image/png"
-            startActivity(Intent.createChooser(intent, "Share image via"))
-
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-    }
-
-
     fun getImageUri(context: Context, inImage: Bitmap): Uri? {
         val bytes = ByteArrayOutputStream()
         inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes)
-        val path = MediaStore.Images.Media.insertImage(context.contentResolver, inImage, "Title", null)
+        val path = MediaStore.Images.Media.insertImage(context.contentResolver, inImage,
+                "Title",
+                null)
         return Uri.parse(path)
+    }
+
+    override fun onWindowFocusChanged(hasFocus: Boolean) {
+        super.onWindowFocusChanged(hasFocus)
+        if (hasFocus) {
+            hideSystemUI()
+        }
+    }
+
+    private fun hideSystemUI() {
+        // Enables regular immersive mode.
+        // For "lean back" mode, remove SYSTEM_UI_FLAG_IMMERSIVE.
+        // Or for "sticky immersive," replace it with SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+        val decorView = window.decorView
+        decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_IMMERSIVE
+                // Set the content to appear under the system bars so that the
+                // content doesn't resize when the system bars hide and show.
+                or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                // Hide the nav bar and status bar
+                or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                or View.SYSTEM_UI_FLAG_FULLSCREEN)
     }
 }

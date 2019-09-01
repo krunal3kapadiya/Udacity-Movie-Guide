@@ -16,8 +16,10 @@ class SearchViewModel : ViewModel() {
     val searchMovie = MediatorLiveData<MovieResponse>()
     val searchTV = MediatorLiveData<TVResponse>()
     val searchActor = MediatorLiveData<ActorsResponse>()
+    val isLoading = MediatorLiveData<Boolean>()
 
     fun searchMovies(string: String, tabPosition: Int, page: Int) {
+        isLoading.postValue(true)
         val movieClient = MovieApiClient.client!!
                 .create(MovieApi::class.java)
 
@@ -31,9 +33,11 @@ class SearchViewModel : ViewModel() {
                 genres?.subscribeOn(Schedulers.io())?.observeOn(AndroidSchedulers.mainThread())
                         ?.subscribe(
                                 {
+                                    isLoading.postValue(false)
                                     searchMovie.postValue(it)
                                 })
                         {
+                            isLoading.postValue(false)
                             Log.e("MovieResponseException", it.message)
                         }
 
@@ -46,9 +50,11 @@ class SearchViewModel : ViewModel() {
                 genres?.subscribeOn(Schedulers.io())?.observeOn(AndroidSchedulers.mainThread())
                         ?.subscribe(
                                 {
+                                    isLoading.postValue(false)
                                     searchTV.postValue(it)
                                 })
                         {
+                            isLoading.postValue(false)
                             Log.e("MovieResponseException", it.message)
                         }
             }
@@ -60,9 +66,11 @@ class SearchViewModel : ViewModel() {
                 genres?.subscribeOn(Schedulers.io())?.observeOn(AndroidSchedulers.mainThread())
                         ?.subscribe(
                                 {
+                                    isLoading.postValue(false)
                                     searchActor.postValue(it)
                                 })
                         {
+                            isLoading.postValue(false)
                             Log.e("MovieResponseException", it.message)
                         }
             }

@@ -63,6 +63,16 @@ class TvListingFragment : Fragment(), TVRVAdapter.OnItemClick {
 
     fun loadNextDataFromApi(mAdapter: TVRVAdapter, page: Int) {
         val number = arguments?.getInt("ID")
+        viewModel.isLoading.observe(this, android.arch.lifecycle.Observer {
+            if (it!!) {
+                pb_main.visibility = View.VISIBLE
+                rv_list_movie_main.visibility = View.GONE
+            } else {
+                pb_main.visibility = View.GONE
+                rv_list_movie_main.visibility = View.VISIBLE
+            }
+        })
+
         viewModel.getPopularTvList(number, page)
         viewModel.movieArrayList.observe(this, android.arch.lifecycle.Observer {
             mAdapter.setData(it)

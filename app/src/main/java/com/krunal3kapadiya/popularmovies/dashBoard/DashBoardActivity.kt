@@ -157,7 +157,7 @@ class DashBoardActivity : AppCompatActivity(), SearchView.OnQueryTextListener, N
                     action = Intent.ACTION_SEND
                     putExtra(
                             Intent.EXTRA_TEXT,
-                            "I like this Popular Movie app. Download this app at below link \n http://play.google.com/store/apps/details?id=com.krunal3kapadiya.popularmovies \n also share your awesome feedback."
+                            "I like this Cinamania app. Download this app at below link \n http://play.google.com/store/apps/details?id=com.krunal3kapadiya.popularmovies \n also share your awesome feedback."
                     )
                     type = "text/plain"
 

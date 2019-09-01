@@ -12,18 +12,22 @@ import io.reactivex.schedulers.Schedulers
 
 
 class ActorsViewModel : ViewModel() {
+    val isLoading = MediatorLiveData<Boolean>()
 
     fun getActorsList(page: Int): MediatorLiveData<List<Result>> {
+        isLoading.postValue(true)
         val movieArrayList = MediatorLiveData<List<Result>>()
         val movieClient = MovieApiClient.client!!
                 .create(MovieApi::class.java)
-        val genres: Observable<ActorsResponse>? = movieClient.getActorsList(page,BuildConfig.TMDB_API_KEY)
+        val genres: Observable<ActorsResponse>? = movieClient.getActorsList(page, BuildConfig.TMDB_API_KEY)
         genres?.subscribeOn(Schedulers.io())?.observeOn(AndroidSchedulers.mainThread())
                 ?.subscribe(
                         {
+                            isLoading.postValue(false)
                             movieArrayList.postValue(it.result)
                         })
                 {
+                    isLoading.postValue(false)
                     Log.e("MovieResponseException", it.message)
                 }
         return movieArrayList

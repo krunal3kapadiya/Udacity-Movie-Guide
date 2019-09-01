@@ -1,8 +1,10 @@
 package com.krunal3kapadiya.popularmovies.dashBoard.movies
 
 import android.arch.lifecycle.ViewModelProviders
+import android.content.ComponentName
 import android.content.Intent
 import android.os.Bundle
+import android.provider.Settings
 import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
 import android.support.v7.widget.GridLayoutManager
@@ -12,13 +14,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.Toast
 import com.krunal3kapadiya.popularmovies.Constants
 import com.krunal3kapadiya.popularmovies.EndlessRecyclerViewScrollListener
 import com.krunal3kapadiya.popularmovies.MovieDetailActivity
 import com.krunal3kapadiya.popularmovies.R
 import com.krunal3kapadiya.popularmovies.data.adapter.MovieRVAdapter
 import com.krunal3kapadiya.popularmovies.data.model.Movies
-import kotlinx.android.synthetic.main.fragment_movies.*
 import kotlinx.android.synthetic.main.fragment_now_playing.*
 
 class NowPlayingFragment : Fragment(), MovieRVAdapter.OnItemClick {
@@ -78,22 +80,49 @@ class NowPlayingFragment : Fragment(), MovieRVAdapter.OnItemClick {
     }
 
     fun displayNetworkDisableError(view: View?, listener: View.OnClickListener) {
-        val snackbar = Snackbar.make(view!!, R.string.internet_not_available, Snackbar.LENGTH_INDEFINITE)
+        val snackbar = Snackbar.make(view!!,
+                R.string.internet_not_available,
+                Snackbar.LENGTH_INDEFINITE)
                 .setAction(R.string.retry, listener)
         snackbar.show()
     }
 
     fun loadNextDataFromApi(mAdapter: MovieRVAdapter, page: Int) {
-        val number = arguments?.getInt("Number")
-        moviesViewModel.getPopularMovieList(number, 1)
-        moviesViewModel.errorMessage.observe(this, android.arch.lifecycle.Observer {
-            displayNetworkDisableError(moviesTab, View.OnClickListener {
-                moviesViewModel.getPopularMovieList(number, page)
-            })
-        })
+        if (Constants.isNetworkAvailable(context = context!!)) {
 
-        moviesViewModel.movieArrayList.observe(this, android.arch.lifecycle.Observer {
-            mAdapter.setData(it)
-        })
+
+            val number = arguments?.getInt("Number")
+
+            moviesViewModel.isLoading.observe(this, android.arch.lifecycle.Observer {
+                if (it!!) {
+                    pb_main.visibility = View.VISIBLE
+                    rv_list_movie_main.visibility = View.GONE
+                } else {
+                    pb_main.visibility = View.GONE
+                    rv_list_movie_main.visibility = View.VISIBLE
+                }
+            })
+            moviesViewModel.getPopularMovieList(number, page)
+            moviesViewModel.errorMessage.observe(this, android.arch.lifecycle.Observer {
+                Toast.makeText(context, it, Toast.LENGTH_LONG).show()
+                displayNetworkDisableError(rv_list_movie_main, View.OnClickListener {
+                    moviesViewModel.getPopularMovieList(number, page)
+                })
+            })
+
+            moviesViewModel.movieArrayList.observe(this, android.arch.lifecycle.Observer {
+                mAdapter.setData(it)
+            })
+        } else {
+            displayNetworkDisableError(rv_list_movie_main, View.OnClickListener {
+                //                val intent = Intent(Settings.ACTION_DATA_ROAMING_SETTINGS)
+//                val componentName = ComponentName("com.android.phone", "com.android.phone.Settings")
+//                intent.component = componentName
+//                startActivity(intent)
+//                val in_ = Intent(Settings.ACTION_NETWORK_OPERATOR_SETTINGS)
+                val in_ = Intent(Settings.ACTION_DATA_ROAMING_SETTINGS)
+                startActivity(in_)
+            })
+        }
     }
 }

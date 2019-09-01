@@ -100,8 +100,11 @@ class MovieRVAdapter(
                             }
                         })
 
-                itemView.tv_movie_title.text = mMovieArrayList[position].name
-                itemView.img_movie_row.setOnClickListener { mOnItemClick.onItemClick(adapterPosition, itemView.img_movie_row, mMovieArrayList[adapterPosition]) }
+                itemView.tv_movie_title.text = mMovieArrayList[adapterPosition].name
+                itemView.img_movie_row.setOnClickListener {
+                    mOnItemClick.onItemClick(adapterPosition,
+                            itemView.img_movie_row, mMovieArrayList[adapterPosition])
+                }
             }
         }
     }
