@@ -14,7 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-
 package com.krunal3kapadiya.popularmovies.data.api
 
 import com.krunal3kapadiya.popularmovies.dashBoard.actors.ActorsDetailResponse
@@ -68,16 +67,6 @@ internal interface MovieApi {
                     @Query("page") page: Int,
                     @Query("include_adult") includeAdult: Boolean): Observable<MovieResponse>
 
-    @GET("search/person")
-    fun searchPerson(@Query("api_key") apiKey: String,
-                     @Query("query") query: String,
-                     @Query("page") page: Int): Observable<ActorsResponse>
-
-    @GET("search/tv")
-    fun searchTVShows(@Query("api_key") apiKey: String,
-                      @Query("query") query: String,
-                      @Query("page") page: Int): Observable<TVResponse>
-
     @GET("movie/upcoming")
     fun getUpComingMovies(@Query("page") page: Int,
                           @Query("api_key") apiKey: String): Observable<MovieResponse>
@@ -101,6 +90,19 @@ internal interface MovieApi {
     fun tvTopRated(@Query("page") page: Int,
                    @Query("api_key") apiKey: String): Observable<TVResponse>
 
+    @GET("search/tv")
+    fun searchTVShows(@Query("api_key") apiKey: String,
+                      @Query("query") query: String,
+                      @Query("page") page: Int): Observable<TVResponse>
+
+    @GET("search/person")
+    fun searchPerson(@Query("api_key") apiKey: String,
+                     @Query("query") query: String,
+                     @Query("page") page: Int): Observable<ActorsResponse>
+
+    /*---
+    Get cast list of movie, tv detail screen
+    ---*/
     @GET("movie/{id}/casts")
     fun getCastList(@Path("id") id: Int, @Query("api_key") apiKey: String): Observable<CastResponse>
 
@@ -122,4 +124,16 @@ internal interface MovieApi {
             @Path("person_id") personId: Int,
             @Query("api_key") apiKey: String
     ): Observable<ActorsDetailResponse>
+
+    @GET("person/{person_id}/tv_credits")
+    fun getActorsTvCredits(
+            @Path("person_id") personId: Int,
+            @Query("api_key") apiKey: String
+    ): Observable<CastResponse>
+
+    @GET("person/{person_id}/movie_credits")
+    fun getActorsMovieCredits(
+            @Path("person_id") personId: Int,
+            @Query("api_key") apiKey: String
+    ): Observable<CastResponse>
 }

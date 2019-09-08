@@ -1,17 +1,18 @@
 package com.krunal3kapadiya.popularmovies.dashBoard.actors
 
 import android.arch.lifecycle.MediatorLiveData
-import android.arch.lifecycle.ViewModel
 import android.util.Log
+import com.krunal3kapadiya.popularmovies.base.BaseViewModel
 import com.krunal3kapadiya.popularmovies.BuildConfig
 import com.krunal3kapadiya.popularmovies.data.api.MovieApi
 import com.krunal3kapadiya.popularmovies.data.api.MovieApiClient
+import com.krunal3kapadiya.popularmovies.data.model.CastResponse
+import com.krunal3kapadiya.popularmovies.data.model.actors.Result
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 
-
-class ActorsViewModel : ViewModel() {
+class ActorsViewModel : BaseViewModel() {
     val isLoading = MediatorLiveData<Boolean>()
 
     fun getActorsList(page: Int): MediatorLiveData<List<Result>> {
@@ -38,6 +39,38 @@ class ActorsViewModel : ViewModel() {
         val movieClient = MovieApiClient.client!!
                 .create(MovieApi::class.java)
         val genres: Observable<ActorsDetailResponse>? = movieClient.getActorsDetails(actorId, BuildConfig.TMDB_API_KEY)
+        genres?.subscribeOn(Schedulers.io())?.observeOn(AndroidSchedulers.mainThread())
+                ?.subscribe(
+                        {
+                            actorsDetail.postValue(it)
+                        })
+                {
+                    Log.e("MovieResponseException", it.message)
+                }
+        return actorsDetail
+    }
+
+    fun getActorsMovieShows(actorId: Int): MediatorLiveData<CastResponse> {
+        val actorsDetail = MediatorLiveData<CastResponse>()
+        val movieClient = MovieApiClient.client!!
+                .create(MovieApi::class.java)
+        val genres: Observable<CastResponse>? = movieClient.getActorsMovieCredits(actorId, BuildConfig.TMDB_API_KEY)
+        genres?.subscribeOn(Schedulers.io())?.observeOn(AndroidSchedulers.mainThread())
+                ?.subscribe(
+                        {
+                            actorsDetail.postValue(it)
+                        })
+                {
+                    Log.e("MovieResponseException", it.message)
+                }
+        return actorsDetail
+    }
+
+    fun getActorsTVShows(actorId: Int): MediatorLiveData<CastResponse> {
+        val actorsDetail = MediatorLiveData<CastResponse>()
+        val movieClient = MovieApiClient.client!!
+                .create(MovieApi::class.java)
+        val genres: Observable<CastResponse>? = movieClient.getActorsTvCredits(actorId, BuildConfig.TMDB_API_KEY)
         genres?.subscribeOn(Schedulers.io())?.observeOn(AndroidSchedulers.mainThread())
                 ?.subscribe(
                         {

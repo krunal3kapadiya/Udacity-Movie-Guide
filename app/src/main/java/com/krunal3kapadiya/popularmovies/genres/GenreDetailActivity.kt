@@ -9,7 +9,8 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.GridLayoutManager
 import android.view.MenuItem
 import android.widget.ImageView
-import com.krunal3kapadiya.popularmovies.MovieDetailActivity
+import com.krunal3kapadiya.popularmovies.Constants
+import com.krunal3kapadiya.popularmovies.dashBoard.movies.MovieDetailActivity
 import com.krunal3kapadiya.popularmovies.R
 import com.krunal3kapadiya.popularmovies.data.adapter.MovieRVAdapter
 import com.krunal3kapadiya.popularmovies.data.model.Movies
@@ -32,14 +33,23 @@ class GenreDetailActivity : AppCompatActivity() {
         val genres = intent.getParcelableExtra<Genres>("genres")
         supportActionBar?.title = genres.name
         val viewModel = ViewModelProviders.of(this).get(GenresViewModel::class.java)
-        val adapter = MovieRVAdapter(object : MovieRVAdapter.OnItemClick {
-            override fun onItemClick(pos: Int, view: ImageView?, movies: Movies) {
-                val intent = Intent(this@GenreDetailActivity, MovieDetailActivity::class.java)
-                intent.putExtra(MovieDetailActivity.ARG_MOVIE, movies)
-                startActivity(intent)
+        val adapter = MovieRVAdapter(listener = object : MovieRVAdapter.OnItemClick {
+            override fun onItemClick(
+                    pos: Int,
+                    view: ImageView?,
+                    movies: Movies,
+                    themeDarkColor: Int,
+                    themeLightColor: Int
+            ) {
+                MovieDetailActivity.launch(
+                        context = this@GenreDetailActivity,
+                        movies = movies,
+                        themeDarkColor = themeDarkColor,
+                        themeLightColor = themeLightColor
+                )
             }
         })
-        generes_detail_screen.layoutManager = GridLayoutManager(this, 2)
+        generes_detail_screen.layoutManager = GridLayoutManager(this, Constants.SPAN_RECYCLER_VIEW)
         generes_detail_screen.adapter = adapter
         viewModel.getGenresById(genres.id).observe(this, Observer {
             adapter.setData(it)

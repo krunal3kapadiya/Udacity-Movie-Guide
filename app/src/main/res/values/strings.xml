@@ -13,7 +13,7 @@
     <string name="youtube_video">http://www.youtube.com/watch?v=%s</string>
     <string name="search">Search</string>
     <string name="title_movies_fragment">Movies</string>
-    <string name="title_tv_fragment">TV</string>
+    <string name="title_tv_fragment">TV Shows</string>
     <string name="title_actors_fragment">Actors</string>
     <string name="title_activity_main2">Main2Activity</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
@@ -37,4 +37,7 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_favourite">Favourites</string>
+    <string name="tab_text_1">Tab 1</string>
+    <string name="tab_text_2">Tab 2</string>
 </resources>

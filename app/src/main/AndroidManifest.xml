@@ -1,14 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.krunal3kapadiya.popularmovies">
-
+    <!-- <provider -->
+    <!-- android:name="androidx.core.content.FileProvider" -->
+    <!-- android:authorities="${applicationId}.provider" -->
+    <!-- android:exported="false" -->
+    <!-- android:grantUriPermissions="true"> -->
+    <!-- <meta-data -->
+    <!-- android:name="android.support.FILE_PROVIDER_PATHS" -->
+    <!-- android:resource="@xml/provider_paths" /> -->
+    <!-- </provider> -->
     <application
+        android:name=".MyApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_movie"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
+        <activity
+            android:name=".favourites.FavouriteActivity"
+            android:label="@string/title_activity_favourite"
+            android:theme="@style/AppTheme" />
         <activity
             android:name=".dashBoard.DashBoardActivity"
             android:theme="@style/AppTheme.NoActionBar">
@@ -18,22 +31,19 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".dashBoard.ViewImageActivity" />
         <activity
-            android:name=".ViewImageActivity"
-            />
-        <activity
-            android:name=".MovieDetailActivity"
+            android:name=".dashBoard.movies.MovieDetailActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
-        </activity>
-        <!--        <activity-->
-        <!--            android:name=".MovieDetailActivity"-->
-        <!--            android:label="@string/title_activity_movie_detail"-->
-        <!--            android:theme="@style/AppTheme.NoActionBar" />-->
+        </activity> <!-- <activity -->
+        <!-- android:name=".MovieDetailActivity" -->
+        <!-- android:label="@string/title_activity_movie_detail" -->
+        <!-- android:theme="@style/AppTheme.NoActionBar" /> -->
         <activity
             android:name=".genres.GenresActivity"
             android:label="Genres"
@@ -54,13 +64,11 @@
             android:label="Actors"
             android:parentActivityName=".dashBoard.DashBoardActivity" />
         <activity
-            android:name=".SearchActivity"
+            android:name=".search.SearchActivity"
             android:label="Search"
             android:parentActivityName=".dashBoard.DashBoardActivity" />
-
-
         <activity
-            android:name=".TVDetailActivity"
+            android:name=".dashBoard.tvShows.TVDetailActivity"
             android:theme="@style/AppTheme.NoActionBar" />
 
         <meta-data
@@ -68,19 +76,9 @@
             android:value="442d97869312f0d19f6b3b6e434013073d3e838d" />
     </application>
 
-    <!--    <provider-->
-    <!--        android:name="androidx.core.content.FileProvider"-->
-    <!--        android:authorities="${applicationId}.provider"-->
-    <!--        android:exported="false"-->
-    <!--        android:grantUriPermissions="true">-->
-    <!--        <meta-data-->
-    <!--            android:name="android.support.FILE_PROVIDER_PATHS"-->
-    <!--            android:resource="@xml/provider_paths" />-->
-    <!--    </provider>-->
-
-
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
 </manifest>

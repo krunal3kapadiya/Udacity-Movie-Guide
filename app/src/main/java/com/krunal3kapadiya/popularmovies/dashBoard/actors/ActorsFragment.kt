@@ -11,12 +11,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.krunal3kapadiya.popularmovies.Constants
-import com.krunal3kapadiya.popularmovies.EndlessRecyclerViewScrollListener
+import com.krunal3kapadiya.popularmovies.view.EndlessRecyclerViewScrollListener
 import com.krunal3kapadiya.popularmovies.R
 import kotlinx.android.synthetic.main.fragment_actors.*
 
 class ActorsFragment : Fragment(), ActorsAdapter.OnActorClickListener {
-    override fun onActorClick(result: Result) {
+    override fun onActorClick(result: com.krunal3kapadiya.popularmovies.data.model.actors.Result) {
         ActorsDetailActivity.launch(activity!!, result.id)
     }
 

@@ -1,4 +1,4 @@
-package com.krunal3kapadiya.popularmovies
+package com.krunal3kapadiya.popularmovies.dashBoard
 
 import android.Manifest
 import android.content.Context
@@ -19,10 +19,10 @@ import android.view.View
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
+import com.krunal3kapadiya.popularmovies.Constants
+import com.krunal3kapadiya.popularmovies.R
 import kotlinx.android.synthetic.main.activity_view_image.*
 import java.io.ByteArrayOutputStream
-import java.io.File
-import java.io.FileOutputStream
 
 
 class ViewImageActivity : AppCompatActivity() {

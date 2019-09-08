@@ -30,17 +30,5 @@ class AboutUsActivity : AppCompatActivity() {
                 .beginTransaction()
                 .replace(R.id.frame_layout, AboutFragment())
                 .commit()
-
-//        about_txt.text = getString(R.string.about_website)
-//        BundledEmojiCompatConfig(this)
-//                .apply {
-//                    EmojiCompat.init(this)
-//                            .apply {
-//                                process(getString(R.string.about_website))
-//                                        .apply {
-//                                            = this
-//                                        }
-//                            }
-//                }
     }
 }

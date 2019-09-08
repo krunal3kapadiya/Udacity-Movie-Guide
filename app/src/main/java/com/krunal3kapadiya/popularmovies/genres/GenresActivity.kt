@@ -27,7 +27,7 @@ class GenresActivity : AppCompatActivity() {
                 GenreDetailActivity.launch(this@GenresActivity, genres)
             }
         })
-        listGenres.layoutManager = GridLayoutManager(this, 2)
+        listGenres.layoutManager = GridLayoutManager(this, 3)
         listGenres.adapter = adapter
         viewModel.getGenresList().observe(this, Observer {
             it?.genres?.let { it1 -> adapter.setData(it1) }

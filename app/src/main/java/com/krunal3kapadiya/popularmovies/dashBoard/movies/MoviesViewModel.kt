@@ -1,31 +1,44 @@
 package com.krunal3kapadiya.popularmovies.dashBoard.movies
 
+import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MediatorLiveData
-import android.arch.lifecycle.ViewModel
 import android.util.Log
-import android.widget.Toast
+import com.krunal3kapadiya.popularmovies.base.BaseViewModel
 import com.krunal3kapadiya.popularmovies.BuildConfig
-import com.krunal3kapadiya.popularmovies.Constants
+import com.krunal3kapadiya.popularmovies.dao.MoviesDao
 import com.krunal3kapadiya.popularmovies.data.api.MovieApiClient
 import com.krunal3kapadiya.popularmovies.data.api.MovieApi
 import com.krunal3kapadiya.popularmovies.data.model.Cast
 import com.krunal3kapadiya.popularmovies.data.model.MovieResponse
 import com.krunal3kapadiya.popularmovies.data.model.Movies
+import io.reactivex.Completable
 import io.reactivex.Observable
-import io.reactivex.Scheduler
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
-class MoviesViewModel : ViewModel() {
+class MoviesViewModel(private val moviesDao: MoviesDao) : BaseViewModel() {
 
     val errorMessage = MediatorLiveData<String>()
     val movieArrayList = MediatorLiveData<ArrayList<Movies>>()
     val mCastArrayList = MediatorLiveData<List<Cast>>()
     val isLoading = MediatorLiveData<Boolean>()
 
+    /**
+     * add and update posts
+     */
+    fun addOrUpdateMovies(movies: Movies): Completable {
+        return Completable.fromAction {
+            moviesDao.insert(movies)
+        }
+    }
+
+    fun addToFavourite(movies: Movies) {
+        disposable.add(addOrUpdateMovies(movies)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe())
+
+    }
 
     fun getPopularMovieList(number: Int?, page: Int) {
         isLoading.postValue(true)
@@ -72,5 +85,22 @@ class MoviesViewModel : ViewModel() {
                 }) {
                     Log.e("MovieResponseException", it.message)
                 }
+    }
+
+    fun getMoviesById(id: Int): LiveData<Movies> {
+        return moviesDao.getMoviesById(id)
+    }
+
+    fun removeMovies(id: Int) {
+        disposable.add(removeFromFavourite(id)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe())
+    }
+
+    fun removeFromFavourite(id: Int): Completable {
+        return Completable.fromAction {
+            moviesDao.deleteMoviesById(id)
+        }
     }
 }

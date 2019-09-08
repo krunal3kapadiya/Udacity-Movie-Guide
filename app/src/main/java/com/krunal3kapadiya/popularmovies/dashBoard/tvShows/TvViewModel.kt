@@ -2,11 +2,10 @@ package com.krunal3kapadiya.popularmovies.dashBoard.tvShows
 
 import android.arch.lifecycle.MediatorLiveData
 import android.arch.lifecycle.ViewModel
-import android.util.Log
 import com.krunal3kapadiya.popularmovies.BuildConfig
 import com.krunal3kapadiya.popularmovies.data.api.MovieApi
 import com.krunal3kapadiya.popularmovies.data.api.MovieApiClient
-import com.krunal3kapadiya.popularmovies.data.model.Result
+import com.krunal3kapadiya.popularmovies.data.model.TvResult
 import com.krunal3kapadiya.popularmovies.data.model.TVResponse
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -14,7 +13,7 @@ import io.reactivex.schedulers.Schedulers
 
 class TvViewModel : ViewModel() {
     val errorMessage = MediatorLiveData<String>()
-    val movieArrayList = MediatorLiveData<List<Result>>()
+    val movieArrayList = MediatorLiveData<List<TvResult>>()
     val isLoading = MediatorLiveData<Boolean>()
 
     fun getPopularTvList(number: Int?, page: Int) {
@@ -41,7 +40,7 @@ class TvViewModel : ViewModel() {
                 ?.observeOn(AndroidSchedulers.mainThread())
                 ?.subscribe({
                     isLoading.postValue(false)
-                    it.results?.let { movieArrayList.postValue(it) }
+                    it.tvResults?.let { movieArrayList.postValue(it) }
                 }) {
                     isLoading.postValue(false)
                     errorMessage.postValue(it.message)

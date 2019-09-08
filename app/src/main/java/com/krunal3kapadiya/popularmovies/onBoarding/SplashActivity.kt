@@ -1,8 +1,9 @@
-package com.krunal3kapadiya.popularmovies
+package com.krunal3kapadiya.popularmovies.onBoarding
 
 import android.os.Bundle
 import android.os.Handler
 import android.support.v7.app.AppCompatActivity
+import com.krunal3kapadiya.popularmovies.R
 import com.krunal3kapadiya.popularmovies.dashBoard.DashBoardActivity
 
 /**

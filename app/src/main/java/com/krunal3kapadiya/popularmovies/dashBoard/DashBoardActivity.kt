@@ -13,13 +13,13 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.SearchView
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.Toast
 import com.krunal3kapadiya.popularmovies.R
-import com.krunal3kapadiya.popularmovies.SearchActivity
+import com.krunal3kapadiya.popularmovies.search.SearchActivity
 import com.krunal3kapadiya.popularmovies.about.AboutUsActivity
 import com.krunal3kapadiya.popularmovies.dashBoard.actors.ActorsFragment
 import com.krunal3kapadiya.popularmovies.dashBoard.movies.MoviesFragment
 import com.krunal3kapadiya.popularmovies.dashBoard.tvShows.TvShowsFragment
+import com.krunal3kapadiya.popularmovies.favourites.FavouriteActivity
 import com.krunal3kapadiya.popularmovies.genres.GenresActivity
 import kotlinx.android.synthetic.main.activity_dashboard.*
 import kotlinx.android.synthetic.main.app_bar_main.*
@@ -147,7 +147,7 @@ class DashBoardActivity : AppCompatActivity(), SearchView.OnQueryTextListener, N
                 GenresActivity.launch(this)
             }
             R.id.nav_favourites_device -> {
-                Toast.makeText(this, "Coming Soon", Toast.LENGTH_LONG).show()
+                FavouriteActivity.launch(this)
             }
             R.id.nav_about -> {
                 AboutUsActivity.launch(this)

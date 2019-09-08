@@ -1,7 +1,8 @@
 package com.krunal3kapadiya.popularmovies.dashBoard.movies
 
+import android.annotation.SuppressLint
+import android.app.ActivityOptions
 import android.arch.lifecycle.ViewModelProviders
-import android.content.ComponentName
 import android.content.Intent
 import android.os.Bundle
 import android.provider.Settings
@@ -15,29 +16,40 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.Toast
-import com.krunal3kapadiya.popularmovies.Constants
-import com.krunal3kapadiya.popularmovies.EndlessRecyclerViewScrollListener
-import com.krunal3kapadiya.popularmovies.MovieDetailActivity
-import com.krunal3kapadiya.popularmovies.R
+import com.krunal3kapadiya.popularmovies.*
 import com.krunal3kapadiya.popularmovies.data.adapter.MovieRVAdapter
 import com.krunal3kapadiya.popularmovies.data.model.Movies
+import com.krunal3kapadiya.popularmovies.view.EndlessRecyclerViewScrollListener
 import kotlinx.android.synthetic.main.fragment_now_playing.*
 
 class NowPlayingFragment : Fragment(), MovieRVAdapter.OnItemClick {
-    override fun onItemClick(pos: Int, view: ImageView?, movies: Movies) {
-        val intent = Intent(context, MovieDetailActivity::class.java)
-        intent.putExtra(MovieDetailActivity.ARG_MOVIE, movies)
-
-//        val options = view?.let {
-//            ActivityOptionsCompat.makeSceneTransitionAnimation(
-//                    activity!!,
-//                    it,
-//                    ViewCompat.getTransitionName(view))
-//        }
-//
-
-        startActivity(intent)
+    override fun onItemClick(pos: Int,
+                             view: ImageView?,
+                             movies: Movies,
+                             themeDarkColor: Int,
+                             themeLightColor: Int) {
+        context?.let { MovieDetailActivity.launch(
+                context = it,
+                movies = movies,
+                themeDarkColor = themeDarkColor,
+                themeLightColor = themeLightColor) }
     }
+
+//    override fun onItemClick(pos: Int, view: ImageView?, movies: Movies) {
+
+//
+//        val options = view?.let {
+//            ViewCompat.getTransitionName(view)?.let { it1 ->
+//                ActivityOptionsCompat.makeSceneTransitionAnimation(
+//                        activity!!,
+//                        it,
+//                        it1)
+//            }
+//        }
+//        val options = ActivityOptions
+//                .makeSceneTransitionAnimation(activity, view, "robot")
+//        startActivity(intent, options.toBundle())
+//    }
 
     companion object {
         fun newInstance(number: Int): NowPlayingFragment {
@@ -63,7 +75,9 @@ class NowPlayingFragment : Fragment(), MovieRVAdapter.OnItemClick {
         rv_list_movie_main!!.layoutManager = layoutManager
         mAdapter = MovieRVAdapter(this)
         rv_list_movie_main!!.adapter = mAdapter
-        moviesViewModel = ViewModelProviders.of(this).get(MoviesViewModel::class.java)
+
+        val viewModelFactory = Injection.provideMoviesViewModel(context!!)
+        moviesViewModel = ViewModelProviders.of(this, viewModelFactory).get(MoviesViewModel::class.java)
 
         loadNextDataFromApi(mAdapter!!, 1)
 
@@ -115,11 +129,6 @@ class NowPlayingFragment : Fragment(), MovieRVAdapter.OnItemClick {
             })
         } else {
             displayNetworkDisableError(rv_list_movie_main, View.OnClickListener {
-                //                val intent = Intent(Settings.ACTION_DATA_ROAMING_SETTINGS)
-//                val componentName = ComponentName("com.android.phone", "com.android.phone.Settings")
-//                intent.component = componentName
-//                startActivity(intent)
-//                val in_ = Intent(Settings.ACTION_NETWORK_OPERATOR_SETTINGS)
                 val in_ = Intent(Settings.ACTION_DATA_ROAMING_SETTINGS)
                 startActivity(in_)
             })

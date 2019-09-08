@@ -1,8 +1,9 @@
-package com.krunal3kapadiya.popularmovies
+package com.krunal3kapadiya.popularmovies.search
 
 import android.arch.lifecycle.MediatorLiveData
 import android.arch.lifecycle.ViewModel
 import android.util.Log
+import com.krunal3kapadiya.popularmovies.BuildConfig
 import com.krunal3kapadiya.popularmovies.dashBoard.actors.ActorsResponse
 import com.krunal3kapadiya.popularmovies.data.api.MovieApi
 import com.krunal3kapadiya.popularmovies.data.api.MovieApiClient

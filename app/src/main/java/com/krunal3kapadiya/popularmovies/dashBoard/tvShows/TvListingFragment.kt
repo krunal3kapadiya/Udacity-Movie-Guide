@@ -11,16 +11,22 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import com.krunal3kapadiya.popularmovies.Constants
-import com.krunal3kapadiya.popularmovies.EndlessRecyclerViewScrollListener
+import com.krunal3kapadiya.popularmovies.view.EndlessRecyclerViewScrollListener
 import com.krunal3kapadiya.popularmovies.R
-import com.krunal3kapadiya.popularmovies.TVDetailActivity
 import com.krunal3kapadiya.popularmovies.data.adapter.TVRVAdapter
-import com.krunal3kapadiya.popularmovies.data.model.Result
+import com.krunal3kapadiya.popularmovies.data.model.TvResult
 import kotlinx.android.synthetic.main.fragment_now_playing.*
 
 class TvListingFragment : Fragment(), TVRVAdapter.OnItemClick {
-    override fun onItemClick(pos: Int, view: ImageView?, movies: Result) {
-        context?.let { TVDetailActivity.launch(it, movies) }
+    override fun onItemClick(pos: Int, view: ImageView?, tvResult: TvResult, darkColor: Int, lightColor: Int) {
+        context?.let {
+            TVDetailActivity.launch(
+                    context = it,
+                    tvResult = tvResult,
+                    lightColor = darkColor,
+                    darkColor = lightColor
+            )
+        }
     }
 
     companion object {
@@ -46,7 +52,7 @@ class TvListingFragment : Fragment(), TVRVAdapter.OnItemClick {
         viewModel = ViewModelProviders.of(this).get(TvViewModel::class.java)
         val layoutManager = GridLayoutManager(context, Constants.SPAN_RECYCLER_VIEW)
         rv_list_movie_main.layoutManager = layoutManager
-        mAdapter = TVRVAdapter(context!!, this)
+        mAdapter = TVRVAdapter(this)
         rv_list_movie_main.adapter = mAdapter
         loadNextDataFromApi(mAdapter!!, 1)
         scrollListener = object : EndlessRecyclerViewScrollListener(layoutManager) {

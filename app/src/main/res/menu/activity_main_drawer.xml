@@ -28,7 +28,7 @@
         <item
             android:id="@+id/nav_favourites_device"
             android:icon="@drawable/ic_favorite_black_24dp"
-            android:title="Favourites (Device)" />
+            android:title="Favourites" />
         <item
             android:id="@+id/nav_about"
             android:icon="@drawable/ic_about_black_24dp"

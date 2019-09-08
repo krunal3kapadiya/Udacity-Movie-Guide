@@ -7,10 +7,9 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
-import com.bumptech.glide.Glide
-import com.krunal3kapadiya.popularmovies.Constants
 import com.krunal3kapadiya.popularmovies.R
-import kotlinx.android.synthetic.main.activity_actor_detail.*
+import com.krunal3kapadiya.popularmovies.dashBoard.TabFragmentAdapter
+import kotlinx.android.synthetic.main.fragment_movies.*
 
 class ActorsDetailActivity : AppCompatActivity() {
     companion object {
@@ -23,10 +22,18 @@ class ActorsDetailActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_actor_detail)
-
+        setContentView(R.layout.fragment_movies)
         val actorId = intent.getIntExtra("actorId", 0)
         val viewModel = ViewModelProviders.of(this).get(ActorsViewModel::class.java)
+
+        val adapter = TabFragmentAdapter(supportFragmentManager)
+
+        adapter.addFragment(ActorDetailFragment.newInstance(actorId), "Biography")
+        adapter.addFragment(ActorsMoviesFragment.newInstance(actorId), "Movies")
+        adapter.addFragment(ActorsTvShowsFragment.newInstance(actorId), "TVShows")
+        moviesViewPager.offscreenPageLimit = 1
+        moviesViewPager.adapter = adapter
+        moviesTab.setupWithViewPager(moviesViewPager)
         // TODO create tab screen here
         //
         viewModel.getActorsDetail(actorId).observe(this, Observer {
@@ -39,14 +46,6 @@ class ActorsDetailActivity : AppCompatActivity() {
             it?.id
 
             supportActionBar?.title = it?.name
-            actor_place_of_birth.text = it?.birthday
-//            actor_known_as.text = it?.alsoKnownAs
-            actor_birthday.text = it?.placeOfBirth//
-            actor_details.text = it?.biography
-            Glide.with(this)
-                    .load(Constants.BASE_IMAGE_URL + Constants.POSTER_SIZE_500 + it?.profilePath)
-                    .placeholder(R.mipmap.ic_movie)
-                    .into(actor_image)
 
         })
     }
