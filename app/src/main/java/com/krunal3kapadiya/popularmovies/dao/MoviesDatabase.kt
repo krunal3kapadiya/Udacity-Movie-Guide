@@ -5,6 +5,9 @@ import android.arch.persistence.room.Room
 import android.arch.persistence.room.RoomDatabase
 import android.content.Context
 import com.krunal3kapadiya.popularmovies.data.model.Movies
+import com.krunal3kapadiya.popularmovies.data.model.TvResult
+import com.krunal3kapadiya.popularmovies.data.model.actors.ActorResult
+
 
 /**
  * @author krunal kapadiya
@@ -12,7 +15,7 @@ import com.krunal3kapadiya.popularmovies.data.model.Movies
  * @date 14,April,2019
  */
 
-@Database(entities = [Movies::class], version = 1)
+@Database(entities = [Movies::class, TvResult::class, ActorResult::class], version = 1)
 abstract class MoviesDatabase : RoomDatabase() {
     abstract fun moviesDao(): MoviesDao
     abstract fun tvShowsDao(): TvDao

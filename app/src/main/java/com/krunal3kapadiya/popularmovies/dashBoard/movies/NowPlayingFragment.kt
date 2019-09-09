@@ -17,22 +17,27 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.Toast
 import com.krunal3kapadiya.popularmovies.*
+import com.krunal3kapadiya.popularmovies.data.OnItemClick
 import com.krunal3kapadiya.popularmovies.data.adapter.MovieRVAdapter
 import com.krunal3kapadiya.popularmovies.data.model.Movies
 import com.krunal3kapadiya.popularmovies.view.EndlessRecyclerViewScrollListener
 import kotlinx.android.synthetic.main.fragment_now_playing.*
 
-class NowPlayingFragment : Fragment(), MovieRVAdapter.OnItemClick {
+class NowPlayingFragment : Fragment(), OnItemClick {
     override fun onItemClick(pos: Int,
                              view: ImageView?,
-                             movies: Movies,
+                             title: String,
+                             id: Int,
                              themeDarkColor: Int,
                              themeLightColor: Int) {
-        context?.let { MovieDetailActivity.launch(
-                context = it,
-                movies = movies,
-                themeDarkColor = themeDarkColor,
-                themeLightColor = themeLightColor) }
+        context?.let {
+            MovieDetailActivity.launch(
+                    context = it,
+                    movieId = id,
+                    movieTitle = title,
+                    themeDarkColor = themeDarkColor,
+                    themeLightColor = themeLightColor)
+        }
     }
 
 //    override fun onItemClick(pos: Int, view: ImageView?, movies: Movies) {

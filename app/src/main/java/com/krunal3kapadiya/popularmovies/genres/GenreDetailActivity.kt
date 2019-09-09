@@ -12,6 +12,7 @@ import android.widget.ImageView
 import com.krunal3kapadiya.popularmovies.Constants
 import com.krunal3kapadiya.popularmovies.dashBoard.movies.MovieDetailActivity
 import com.krunal3kapadiya.popularmovies.R
+import com.krunal3kapadiya.popularmovies.data.OnItemClick
 import com.krunal3kapadiya.popularmovies.data.adapter.MovieRVAdapter
 import com.krunal3kapadiya.popularmovies.data.model.Movies
 import kotlinx.android.synthetic.main.activity_genere_detail.*
@@ -33,17 +34,19 @@ class GenreDetailActivity : AppCompatActivity() {
         val genres = intent.getParcelableExtra<Genres>("genres")
         supportActionBar?.title = genres.name
         val viewModel = ViewModelProviders.of(this).get(GenresViewModel::class.java)
-        val adapter = MovieRVAdapter(listener = object : MovieRVAdapter.OnItemClick {
+        val adapter = MovieRVAdapter(listener = object : OnItemClick {
             override fun onItemClick(
                     pos: Int,
                     view: ImageView?,
-                    movies: Movies,
+                    title: String,
+                    id: Int,
                     themeDarkColor: Int,
                     themeLightColor: Int
             ) {
                 MovieDetailActivity.launch(
                         context = this@GenreDetailActivity,
-                        movies = movies,
+                        movieId = id,
+                        movieTitle = title,
                         themeDarkColor = themeDarkColor,
                         themeLightColor = themeLightColor
                 )

@@ -5,15 +5,12 @@ import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.content.Intent
 import android.content.res.ColorStateList
-import android.graphics.Bitmap
-import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
-import android.support.v7.graphics.Palette
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.LinearSnapHelper
 import android.support.v7.widget.RecyclerView
@@ -21,10 +18,12 @@ import android.support.v7.widget.SnapHelper
 import android.view.MenuItem
 import android.view.View
 import android.view.WindowManager
+import android.widget.Toast
 import com.bumptech.glide.Glide
-import com.bumptech.glide.request.target.CustomTarget
-import com.bumptech.glide.request.transition.Transition
-import com.krunal3kapadiya.popularmovies.*
+import com.krunal3kapadiya.popularmovies.BuildConfig
+import com.krunal3kapadiya.popularmovies.Constants
+import com.krunal3kapadiya.popularmovies.Injection
+import com.krunal3kapadiya.popularmovies.R
 import com.krunal3kapadiya.popularmovies.dashBoard.ViewImageActivity
 import com.krunal3kapadiya.popularmovies.dashBoard.actors.ActorsDetailActivity
 import com.krunal3kapadiya.popularmovies.data.adapter.ActorsListAdapter
@@ -54,36 +53,29 @@ class MovieDetailActivity(private var isFavorite: Boolean = false) : AppCompatAc
     private var themeDarkColor: Int = 0
 
     companion object {
-        var ARG_MOVIE = "movie"
+        var ARG_MOVIE_ID = "movie_id"
+        var ARG_MOVIE_TITLE = "movie_title"
         var ARG_DARK_COLOR = "dark_color"
         var ARG_LIGHT_COLOR = "light_color"
-        fun launch(context: Context) {
-            val intent = Intent(context, MovieDetailActivity::class.java)
-            context.startActivity(intent)
-        }
-
-        fun launch(context: Context, movies: Movies) {
-            val intent = Intent(context, MovieDetailActivity::class.java)
-            intent.putExtra(ARG_MOVIE, movies)
-            context.startActivity(intent)
-        }
 
         fun launch(context: Context,
-                   movies: Movies,
+                   movieId: Int,
+                   movieTitle: String,
                    themeDarkColor: Int,
                    themeLightColor: Int) {
             val intent = Intent(context, MovieDetailActivity::class.java)
-            intent.putExtra(ARG_MOVIE, movies)
+            intent.putExtra(ARG_MOVIE_ID, movieId)
+            intent.putExtra(ARG_MOVIE_TITLE, movieTitle)
             intent.putExtra(ARG_DARK_COLOR, themeDarkColor)
             intent.putExtra(ARG_LIGHT_COLOR, themeLightColor)
             context.startActivity(intent)
         }
     }
 
-
+    lateinit var poster_url: String
+    lateinit var name: String
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val movieItem = intent.getParcelableExtra<Movies>(ARG_MOVIE)
         themeLightColor = intent.getIntExtra(ARG_LIGHT_COLOR, 0)
         themeDarkColor = intent.getIntExtra(ARG_DARK_COLOR, 0)
         mContext = this@MovieDetailActivity
@@ -96,18 +88,37 @@ class MovieDetailActivity(private var isFavorite: Boolean = false) : AppCompatAc
 
         setContentView(R.layout.activity_movie_detail)
         setSupportActionBar(toolbar)
+        name = intent.getStringExtra(ARG_MOVIE_TITLE)
+        supportActionBar!!.title = name
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
-        supportActionBar!!.title = movieItem.name
-        arb_movie_ratings!!.rating = java.lang.Float.valueOf((movieItem.rating!!.toDouble() / 2.0).toString())!!
-        txt_movie_overview!!.text = movieItem.overView
 
-        val pattern = Pattern.compile("(\\d{4})-(\\d{2})-(\\d{2})")
-        val dateMatcher = pattern.matcher(movieItem.releaseDate)
-        if (dateMatcher.find()) {
-            txt_movie_release!!.text = dateMatcher.group(1)
-        }
+        val viewModelFactory = Injection.provideMoviesViewModel(this)
+        val moviesViewModel = ViewModelProviders.of(this, viewModelFactory).get(MoviesViewModel::class.java)
+        val movieId = intent.getIntExtra(ARG_MOVIE_ID, 0)
 
-        movieId = movieItem.id.toLong()
+        moviesViewModel.getMovieDetail(movieId).observe(this, Observer {
+            arb_movie_ratings!!.rating = java.lang.Float.valueOf((it?.vote_average!!.toDouble() / 2.0).toString())!!
+            txt_movie_overview!!.text = it.overview
+
+            val pattern = Pattern.compile("(\\d{4})-(\\d{2})-(\\d{2})")
+            val dateMatcher = pattern.matcher(it.release_date)
+            if (dateMatcher.find()) {
+                txt_movie_release!!.text = dateMatcher.group(1)
+            }
+
+            Glide.with(this)
+                    .load(Constants.BASE_IMAGE_URL + Constants.POSTER_SIZE_500 + it.poster_path)
+                    .into(img_movie_poster)
+
+            Glide.with(this)
+                    .load(Constants.BASE_IMAGE_URL + Constants.POSTER_SIZE_500 + it.backdrop_path)
+                    .placeholder(ContextCompat.getDrawable(this, R.mipmap.ic_movie))
+                    .into(movie_detail_image)
+            poster_url = it.poster_path
+            val backdropUrl = it.backdrop_path
+            img_movie_poster.setOnClickListener { ViewImageActivity.launch(this, poster_url) }
+            movie_detail_image.setOnClickListener { ViewImageActivity.launch(this, backdropUrl) }
+        })
 
         mReviewList = ArrayList()
         mReviewAdapter = ReviewRVAdapter(this, mReviewList!!, themeLightColor)
@@ -121,19 +132,9 @@ class MovieDetailActivity(private var isFavorite: Boolean = false) : AppCompatAc
         rv_movie_trailer!!.addOnScrollListener(object : RecyclerView.OnScrollListener() {})
         rv_movie_reviews!!.layoutManager = LinearLayoutManager(this)
         rv_movie_reviews!!.adapter = mReviewAdapter
-
-        Glide.with(this)
-                .load(Constants.BASE_IMAGE_URL + Constants.POSTER_SIZE_500 + movieItem.url)
-                .into(img_movie_poster)
-
-        img_movie_poster.setOnClickListener { ViewImageActivity.launch(this, movieItem.url) }
         getReviewList()
         getTrailerList()
-
-        val viewModelFactory = Injection.provideMoviesViewModel(this)
-        val moviesViewModel = ViewModelProviders.of(this, viewModelFactory).get(MoviesViewModel::class.java)
-        moviesViewModel.getCast(movieItem.id)
-
+        moviesViewModel.getCast(movieId)
         casts_view.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         snapHelper.attachToRecyclerView(casts_view)
         val actorsAdapter = ActorsListAdapter(object : ActorsListAdapter.OnItemClick {
@@ -152,15 +153,15 @@ class MovieDetailActivity(private var isFavorite: Boolean = false) : AppCompatAc
             if (isFavorite) {
                 favorite_button!!.setImageResource(R.mipmap.ic_favorite_white)
                 isFavorite = false
-                moviesViewModel.removeMovies(movieItem.id)
+                moviesViewModel.removeMovies(movieId)
             } else {
                 favorite_button!!.setImageResource(R.mipmap.ic_favorite_white_selected)
                 isFavorite = true
-                moviesViewModel.addToFavourite(movieItem)
+                moviesViewModel.addToFavourite(Movies(movieId, name, poster_url))
             }
         }
 
-        moviesViewModel.getMoviesById(movieItem.id).observe(this,
+        moviesViewModel.getMoviesById(movieId).observe(this,
                 Observer {
                     it?.let {
                         isFavorite = true
@@ -173,16 +174,13 @@ class MovieDetailActivity(private var isFavorite: Boolean = false) : AppCompatAc
         else
             favorite_button!!.setImageResource(R.mipmap.ic_favorite_white)
 
-        Glide.with(this)
-                .load(Constants.BASE_IMAGE_URL + Constants.POSTER_SIZE_500 + movieItem.backDropPath)
-                .placeholder(ContextCompat.getDrawable(this, R.mipmap.ic_movie))
-                .into(movie_detail_image)
 
-        movie_detail_image.setOnClickListener {
-            ViewImageActivity.launch(this, movieItem.backDropPath)
-        }
         ctl_movie_detail!!.setContentScrimColor(themeLightColor)
         favorite_button!!.backgroundTintList = ColorStateList.valueOf(themeLightColor)
+
+        moviesViewModel.errorMessage.observe(this, Observer {
+            Toast.makeText(this@MovieDetailActivity, it, Toast.LENGTH_LONG).show()
+        })
     }
 
     private fun getTrailerList() {
@@ -203,12 +201,12 @@ class MovieDetailActivity(private var isFavorite: Boolean = false) : AppCompatAc
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
+        return when (item.itemId) {
             android.R.id.home -> {
                 finish()
-                return true
+                true
             }
-            else -> return super.onOptionsItemSelected(item)
+            else -> super.onOptionsItemSelected(item)
         }
     }
 

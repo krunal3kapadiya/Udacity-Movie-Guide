@@ -16,35 +16,17 @@ import com.google.gson.annotations.SerializedName
 data class TvResult(
         @PrimaryKey
         @SerializedName("id") val id: Int,
-        @SerializedName("original_name") val originalName: String?,
         @SerializedName("name") val name: String?,
-        @SerializedName("vote_count") val voteCount: Int,
-        @SerializedName("first_air_date") val firstAirDate: String?,
-        @SerializedName("backdrop_path") val backdropPath: String?,
-        @SerializedName("vote_average") val voteAverage: String?,
-        @SerializedName("overview") val overview: String?,
         @SerializedName("poster_path") val posterPath: String?
 ) : Parcelable {
     constructor(parcel: Parcel) : this(
             id = parcel.readInt(),
-            originalName = parcel.readString(),
             name = parcel.readString(),
-            voteCount = parcel.readInt(),
-            firstAirDate = parcel.readString(),
-            backdropPath = parcel.readString(),
-            voteAverage = parcel.readString(),
-            overview = parcel.readString(),
             posterPath = parcel.readString())
 
     override fun writeToParcel(dest: Parcel?, p1: Int) {
         dest?.writeInt(id)
-        dest?.writeString(originalName)
         dest?.writeString(name)
-        dest?.writeInt(voteCount)
-        dest?.writeString(firstAirDate)
-        dest?.writeString(backdropPath)
-        dest?.writeString(voteAverage)
-        dest?.writeString(overview)
         dest?.writeString(posterPath)
     }
 

@@ -11,20 +11,29 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import com.krunal3kapadiya.popularmovies.Constants
+import com.krunal3kapadiya.popularmovies.Injection
 import com.krunal3kapadiya.popularmovies.view.EndlessRecyclerViewScrollListener
 import com.krunal3kapadiya.popularmovies.R
+import com.krunal3kapadiya.popularmovies.data.OnItemClick
 import com.krunal3kapadiya.popularmovies.data.adapter.TVRVAdapter
-import com.krunal3kapadiya.popularmovies.data.model.TvResult
 import kotlinx.android.synthetic.main.fragment_now_playing.*
 
-class TvListingFragment : Fragment(), TVRVAdapter.OnItemClick {
-    override fun onItemClick(pos: Int, view: ImageView?, tvResult: TvResult, darkColor: Int, lightColor: Int) {
+class TvListingFragment : Fragment(), OnItemClick {
+    override fun onItemClick(
+            pos: Int,
+            view: ImageView?,
+            title: String,
+            id: Int,
+            themeDarkColor: Int,
+            themeLightColor: Int
+    ) {
         context?.let {
             TVDetailActivity.launch(
                     context = it,
-                    tvResult = tvResult,
-                    lightColor = darkColor,
-                    darkColor = lightColor
+                    tvId = id,
+                    tvTitle = title,
+                    themeDarkColor = themeDarkColor,
+                    themeLightColor = themeLightColor
             )
         }
     }
@@ -49,7 +58,8 @@ class TvListingFragment : Fragment(), TVRVAdapter.OnItemClick {
     lateinit var viewModel: TvViewModel
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel = ViewModelProviders.of(this).get(TvViewModel::class.java)
+        val viewModelFactory = Injection.provideTvViewModel(activity!!)
+        viewModel = ViewModelProviders.of(this, viewModelFactory).get(TvViewModel::class.java)
         val layoutManager = GridLayoutManager(context, Constants.SPAN_RECYCLER_VIEW)
         rv_list_movie_main.layoutManager = layoutManager
         mAdapter = TVRVAdapter(this)

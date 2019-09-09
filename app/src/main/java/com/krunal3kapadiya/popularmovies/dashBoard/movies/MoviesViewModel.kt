@@ -3,14 +3,15 @@ package com.krunal3kapadiya.popularmovies.dashBoard.movies
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MediatorLiveData
 import android.util.Log
-import com.krunal3kapadiya.popularmovies.base.BaseViewModel
 import com.krunal3kapadiya.popularmovies.BuildConfig
+import com.krunal3kapadiya.popularmovies.base.BaseViewModel
 import com.krunal3kapadiya.popularmovies.dao.MoviesDao
-import com.krunal3kapadiya.popularmovies.data.api.MovieApiClient
 import com.krunal3kapadiya.popularmovies.data.api.MovieApi
+import com.krunal3kapadiya.popularmovies.data.api.MovieApiClient
 import com.krunal3kapadiya.popularmovies.data.model.Cast
 import com.krunal3kapadiya.popularmovies.data.model.MovieResponse
 import com.krunal3kapadiya.popularmovies.data.model.Movies
+import com.krunal3kapadiya.popularmovies.data.moviedetails.MovieDetailResponse
 import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -75,11 +76,29 @@ class MoviesViewModel(private val moviesDao: MoviesDao) : BaseViewModel() {
                 }
     }
 
+    fun getMovieDetail(movieId: Int): MediatorLiveData<MovieDetailResponse> {
+        val data: MediatorLiveData<MovieDetailResponse> = MediatorLiveData()
+        val movieClient = MovieApiClient.client!!
+                .create(MovieApi::class.java)
+        disposable.add(movieClient.getMovieDetails(
+                movieId,
+                BuildConfig.TMDB_API_KEY)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
+                    data.postValue(it)
+                }, {
+                    errorMessage.postValue(it.message)
+                }))
+        return data
+    }
+
     fun getCast(cast_id: Int) {
         val movieClient = MovieApiClient.client!!
                 .create(MovieApi::class.java)
         movieClient.getCastList(cast_id, BuildConfig.TMDB_API_KEY)
-                ?.subscribeOn(Schedulers.io())?.observeOn(AndroidSchedulers.mainThread())
+                ?.subscribeOn(Schedulers.io())
+                ?.observeOn(AndroidSchedulers.mainThread())
                 ?.subscribe({
                     it.cast?.let { mCastArrayList.postValue(it) }
                 }) {
@@ -98,7 +117,7 @@ class MoviesViewModel(private val moviesDao: MoviesDao) : BaseViewModel() {
                 .subscribe())
     }
 
-    fun removeFromFavourite(id: Int): Completable {
+    private fun removeFromFavourite(id: Int): Completable {
         return Completable.fromAction {
             moviesDao.deleteMoviesById(id)
         }

@@ -16,6 +16,7 @@ import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
 import com.krunal3kapadiya.popularmovies.Constants
 import com.krunal3kapadiya.popularmovies.R
+import com.krunal3kapadiya.popularmovies.data.OnItemClick
 import com.krunal3kapadiya.popularmovies.data.model.Cast
 import kotlinx.android.synthetic.main.row_movies.view.*
 
@@ -89,6 +90,9 @@ class CastListAdapter(listener: OnItemClick
     }
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        var themeLightColor = 0
+        var themeDarkColor = 0
+
         fun bind(mMovieArrayList: List<Cast>) {
             with(mMovieArrayList) {
                 Glide.with(itemView.context)
@@ -99,8 +103,8 @@ class CastListAdapter(listener: OnItemClick
                             override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
                                 itemView.img_movie_row.setImageBitmap(resource)
                                 val palette = Palette.from(resource).generate()
-                                val themeLightColor = palette.getDominantColor(ContextCompat.getColor(itemView.context!!, R.color.colorAccent))
-                                val themeDarkColor = palette.getDarkVibrantColor(ContextCompat.getColor(itemView.context!!, R.color.colorAccent))
+                                themeLightColor = palette.getDominantColor(ContextCompat.getColor(itemView.context!!, R.color.colorAccent))
+                                themeDarkColor = palette.getDarkVibrantColor(ContextCompat.getColor(itemView.context!!, R.color.colorAccent))
                                 itemView.tv_movie_title.setBackgroundColor(themeLightColor)
                             }
 
@@ -111,6 +115,7 @@ class CastListAdapter(listener: OnItemClick
                                 // clear it here as you can no longer have the bitmap
                             }
                         })
+
                 mMovieArrayList[adapterPosition].title?.let {
                     itemView.tv_movie_title.text = it
                 }
@@ -119,14 +124,16 @@ class CastListAdapter(listener: OnItemClick
                 }
 
                 itemView.img_movie_row.setOnClickListener {
-                    mOnItemClick.onItemClick(adapterPosition,
-                            itemView.img_movie_row, mMovieArrayList[adapterPosition])
+                    mOnItemClick.onItemClick(
+                            adapterPosition,
+                            itemView.img_movie_row,
+                            itemView.tv_movie_title.text.toString(),
+                            mMovieArrayList[adapterPosition].id,
+                            themeDarkColor,
+                            themeLightColor
+                    )
                 }
             }
         }
-    }
-
-    interface OnItemClick {
-        fun onItemClick(pos: Int, view: ImageView?, movies: Cast)
     }
 }

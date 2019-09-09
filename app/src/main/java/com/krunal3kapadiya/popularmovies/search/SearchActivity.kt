@@ -12,14 +12,14 @@ import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import com.krunal3kapadiya.popularmovies.R
-import com.krunal3kapadiya.popularmovies.dashBoard.tvShows.TVDetailActivity
 import com.krunal3kapadiya.popularmovies.dashBoard.actors.ActorsAdapter
 import com.krunal3kapadiya.popularmovies.dashBoard.actors.ActorsDetailActivity
 import com.krunal3kapadiya.popularmovies.dashBoard.movies.MovieDetailActivity
+import com.krunal3kapadiya.popularmovies.dashBoard.tvShows.TVDetailActivity
+import com.krunal3kapadiya.popularmovies.data.OnItemClick
 import com.krunal3kapadiya.popularmovies.data.adapter.MovieRVAdapter
 import com.krunal3kapadiya.popularmovies.data.adapter.TVRVAdapter
-import com.krunal3kapadiya.popularmovies.data.model.Movies
-import com.krunal3kapadiya.popularmovies.data.model.TvResult
+import com.krunal3kapadiya.popularmovies.data.model.actors.ActorResult
 import com.krunal3kapadiya.popularmovies.view.EndlessRecyclerViewScrollListener
 import kotlinx.android.synthetic.main.activity_search.*
 
@@ -44,17 +44,19 @@ class SearchActivity : AppCompatActivity() {
         val layoutManager = GridLayoutManager(this, 3)
 
         search_rv.layoutManager = layoutManager
-        val mAdapter = MovieRVAdapter(listener = object : MovieRVAdapter.OnItemClick {
+        val mAdapter = MovieRVAdapter(listener = object : OnItemClick {
             override fun onItemClick(
                     pos: Int,
                     view: ImageView?,
-                    movies: Movies,
+                    title: String,
+                    id: Int,
                     themeDarkColor: Int,
                     themeLightColor: Int
             ) {
                 MovieDetailActivity.launch(
                         context = this@SearchActivity,
-                        movies = movies,
+                        movieId = id,
+                        movieTitle = title,
                         themeDarkColor = themeDarkColor,
                         themeLightColor = themeLightColor
                 )
@@ -62,19 +64,27 @@ class SearchActivity : AppCompatActivity() {
         })
 
 
-        val tvAdapter = TVRVAdapter(object : TVRVAdapter.OnItemClick {
-            override fun onItemClick(pos: Int, view: ImageView?, tvResult: TvResult, darkColor: Int, lightColor: Int) {
+        val tvAdapter = TVRVAdapter(object : OnItemClick {
+            override fun onItemClick(
+                    pos: Int,
+                    view: ImageView?,
+                    title: String,
+                    id: Int,
+                    themeDarkColor: Int,
+                    themeLightColor: Int
+            ) {
                 TVDetailActivity.launch(
                         context = this@SearchActivity,
-                        tvResult = tvResult,
-                        lightColor = darkColor,
-                        darkColor = lightColor
+                        tvTitle = title,
+                        tvId = id,
+                        themeDarkColor = themeDarkColor,
+                        themeLightColor = themeLightColor
                 )
             }
         })
 
         val mActorAdapter = ActorsAdapter(object : ActorsAdapter.OnActorClickListener {
-            override fun onActorClick(result: com.krunal3kapadiya.popularmovies.data.model.actors.Result) {
+            override fun onActorClick(result: ActorResult) {
                 ActorsDetailActivity.launch(this@SearchActivity, result.id)
             }
         })

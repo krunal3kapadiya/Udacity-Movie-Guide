@@ -14,6 +14,7 @@ import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
 import com.krunal3kapadiya.popularmovies.Constants
 import com.krunal3kapadiya.popularmovies.R
+import com.krunal3kapadiya.popularmovies.data.OnItemClick
 import com.krunal3kapadiya.popularmovies.data.model.TvResult
 import kotlinx.android.synthetic.main.row_movies.view.*
 
@@ -109,22 +110,13 @@ class TVRVAdapter(
                     mOnItemClick.onItemClick(
                             adapterPosition,
                             itemView.img_movie_row,
-                            mMovieArrayList[adapterPosition],
+                            itemView.tv_movie_title.text.toString(),
+                            mMovieArrayList[adapterPosition].id,
                             themeDarkColor,
                             themeLightColor
                     )
                 }
             }
         }
-    }
-
-    interface OnItemClick {
-        fun onItemClick(
-                pos: Int,
-                view: ImageView?,
-                movies: TvResult,
-                darkColor: Int,
-                lightColor: Int
-        )
     }
 }

@@ -34,8 +34,6 @@ class ActorsDetailActivity : AppCompatActivity() {
         moviesViewPager.offscreenPageLimit = 1
         moviesViewPager.adapter = adapter
         moviesTab.setupWithViewPager(moviesViewPager)
-        // TODO create tab screen here
-        //
         viewModel.getActorsDetail(actorId).observe(this, Observer {
             it?.adult
             it?.deathday//

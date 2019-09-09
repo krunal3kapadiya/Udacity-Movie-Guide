@@ -6,6 +6,7 @@ import com.krunal3kapadiya.popularmovies.dao.ActorsDao
 import com.krunal3kapadiya.popularmovies.dao.MoviesDao
 import com.krunal3kapadiya.popularmovies.dao.TvDao
 import com.krunal3kapadiya.popularmovies.dashBoard.movies.MoviesViewModel
+import com.krunal3kapadiya.popularmovies.dashBoard.tvShows.TvViewModel
 import com.krunal3kapadiya.popularmovies.favourites.FavouriteViewModel
 
 /**
@@ -31,6 +32,8 @@ class ListViewModelFactory(private val dataSource: Any,
             return FavouriteViewModel(dataSource as MoviesDao,
                     secondDataSource as TvDao,
                     thirdDataSource as ActorsDao) as T
+        }else if (modelClass.isAssignableFrom(TvViewModel::class.java)) {
+            return TvViewModel(dataSource as TvDao) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }

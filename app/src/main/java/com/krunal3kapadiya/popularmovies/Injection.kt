@@ -16,6 +16,12 @@ object Injection {
         return ListViewModelFactory(moviesDao)
     }
 
+    @JvmStatic
+    fun provideTvViewModel(context: Context): ListViewModelFactory {
+        val tvDao = provideTvDataSource(context)
+        return ListViewModelFactory(tvDao)
+    }
+
     /**
      * post data source
      */

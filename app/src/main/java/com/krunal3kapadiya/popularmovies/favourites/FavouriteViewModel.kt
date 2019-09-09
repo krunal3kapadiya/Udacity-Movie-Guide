@@ -8,6 +8,8 @@ import com.krunal3kapadiya.popularmovies.dao.MoviesDao
 import com.krunal3kapadiya.popularmovies.dao.TvDao
 import com.krunal3kapadiya.popularmovies.data.model.Cast
 import com.krunal3kapadiya.popularmovies.data.model.Movies
+import com.krunal3kapadiya.popularmovies.data.model.TvResult
+import com.krunal3kapadiya.popularmovies.data.model.actors.ActorResult
 import io.reactivex.disposables.CompositeDisposable
 
 /**
@@ -29,11 +31,12 @@ class FavouriteViewModel(private val moviesDao: MoviesDao,
     fun getAllMovies(): LiveData<List<Movies>> {
         return moviesDao.getAll()
     }
-//    fun getAllTvShows(): LiveData<List<TvResult>> {
-//        return tvDao.getAll()
-//    }
-//    fun getAllActors(): LiveData<List<com.krunal3kapadiya.popularmovies.data.model.actors.TvResult>> {
-//        return actorsDao.getAll()
-//    }
 
+    fun getAllTvShows(): LiveData<List<TvResult>> {
+        return tvDao.getAll()
+    }
+
+    fun getAllActors(): LiveData<List<ActorResult>> {
+        return actorsDao.getAll()
+    }
 }

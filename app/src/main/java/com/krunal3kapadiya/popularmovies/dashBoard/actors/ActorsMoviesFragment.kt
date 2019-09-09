@@ -9,9 +9,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.Toast
 import com.krunal3kapadiya.popularmovies.Constants
 import com.krunal3kapadiya.popularmovies.R
+import com.krunal3kapadiya.popularmovies.dashBoard.movies.MovieDetailActivity
+import com.krunal3kapadiya.popularmovies.data.OnItemClick
 import com.krunal3kapadiya.popularmovies.data.model.Cast
+import com.krunal3kapadiya.popularmovies.data.model.Movies
 import kotlinx.android.synthetic.main.fragment_now_playing.*
 
 /**
@@ -44,9 +48,21 @@ class ActorsMoviesFragment : Fragment() {
 
         val layoutManager = GridLayoutManager(context, Constants.SPAN_RECYCLER_VIEW)
         rv_list_movie_main!!.layoutManager = layoutManager
-        adapter = CastListAdapter(object : CastListAdapter.OnItemClick {
-            override fun onItemClick(pos: Int, view: ImageView?, movies: Cast) {
-
+        adapter = CastListAdapter(listener = object : OnItemClick {
+            override fun onItemClick(
+                    pos: Int,
+                    view: ImageView?,
+                    title: String,
+                    id: Int,
+                    themeDarkColor: Int,
+                    themeLightColor: Int
+            ) {
+                MovieDetailActivity.launch(
+                        context = activity!!,
+                        movieId = id,
+                        movieTitle = title,
+                        themeDarkColor = themeDarkColor,
+                        themeLightColor = themeLightColor)
             }
         })
         rv_list_movie_main!!.adapter = adapter

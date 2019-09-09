@@ -9,15 +9,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import com.krunal3kapadiya.popularmovies.*
+import com.krunal3kapadiya.popularmovies.Injection
+import com.krunal3kapadiya.popularmovies.R
 import com.krunal3kapadiya.popularmovies.dashBoard.actors.ActorsAdapter
 import com.krunal3kapadiya.popularmovies.dashBoard.actors.ActorsDetailActivity
 import com.krunal3kapadiya.popularmovies.dashBoard.movies.MovieDetailActivity
 import com.krunal3kapadiya.popularmovies.dashBoard.tvShows.TVDetailActivity
+import com.krunal3kapadiya.popularmovies.data.OnItemClick
 import com.krunal3kapadiya.popularmovies.data.adapter.MovieRVAdapter
 import com.krunal3kapadiya.popularmovies.data.adapter.TVRVAdapter
 import com.krunal3kapadiya.popularmovies.data.model.Movies
-import com.krunal3kapadiya.popularmovies.data.model.TvResult
+import com.krunal3kapadiya.popularmovies.data.model.actors.ActorResult
 import kotlinx.android.synthetic.main.fragment_now_playing.*
 
 class GetMoviesListFragment : Fragment() {
@@ -50,17 +52,19 @@ class GetMoviesListFragment : Fragment() {
         viewModel = ViewModelProviders.of(this,
                 viewModelFactory).get(FavouriteViewModel::class.java)
 
-        val mAdapter = MovieRVAdapter(listener = object : MovieRVAdapter.OnItemClick {
+        val mAdapter = MovieRVAdapter(listener = object : OnItemClick {
             override fun onItemClick(
                     pos: Int,
                     view: ImageView?,
-                    movies: Movies,
+                    title: String,
+                    id: Int,
                     themeDarkColor: Int,
                     themeLightColor: Int
             ) {
                 MovieDetailActivity.launch(
                         context = activity!!,
-                        movies = movies,
+                        movieId = id,
+                        movieTitle = title,
                         themeDarkColor = themeDarkColor,
                         themeLightColor = themeLightColor)
             }
@@ -68,26 +72,28 @@ class GetMoviesListFragment : Fragment() {
 
 
         val tvAdapter =
-                TVRVAdapter(listener = object : TVRVAdapter.OnItemClick {
+                TVRVAdapter(listener = object : OnItemClick {
                     override fun onItemClick(
                             pos: Int,
                             view: ImageView?,
-                            movies: TvResult,
-                            darkColor: Int,
-                            lightColor: Int
+                            title: String,
+                            id: Int,
+                            themeDarkColor: Int,
+                            themeLightColor: Int
                     ) {
                         TVDetailActivity.launch(
                                 context = activity!!,
-                                tvResult = movies,
-                                lightColor = darkColor,
-                                darkColor = lightColor
+                                tvId = id,
+                                tvTitle = title,
+                                themeDarkColor = themeDarkColor,
+                                themeLightColor = themeLightColor
                         )
 
                     }
                 })
 
         val mActorAdapter = ActorsAdapter(object : ActorsAdapter.OnActorClickListener {
-            override fun onActorClick(result: com.krunal3kapadiya.popularmovies.data.model.actors.Result) {
+            override fun onActorClick(result: ActorResult) {
                 activity?.let { ActorsDetailActivity.launch(it, result.id) }
             }
         })
@@ -115,17 +121,17 @@ class GetMoviesListFragment : Fragment() {
         when (tabPosition) {
             0 -> viewModel.getAllMovies().observe(this, Observer
             {
-                (adapter as MovieRVAdapter).setData(it as ArrayList<Movies>?)
+                (adapter as MovieRVAdapter).setData(it as ArrayList<Movies>)
             })
             1 -> {
-//                viewModel.getAllTvShows().observe(this, Observer {
-//                    (adapter as TVRVAdapter).addData(it)
-//                })
+                viewModel.getAllTvShows().observe(this, Observer {
+                    (adapter as TVRVAdapter).addData(it)
+                })
             }
             2 -> {
-//                viewModel.getAllActors().observe(this, Observer {
-//                    (adapter as ActorsAdapter).addData(it)
-//                })
+                viewModel.getAllActors().observe(this, Observer {
+                    (adapter as ActorsAdapter).addData(it)
+                })
             }
         }
 

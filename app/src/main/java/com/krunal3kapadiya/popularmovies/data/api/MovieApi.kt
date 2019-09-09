@@ -19,6 +19,8 @@ package com.krunal3kapadiya.popularmovies.data.api
 import com.krunal3kapadiya.popularmovies.dashBoard.actors.ActorsDetailResponse
 import com.krunal3kapadiya.popularmovies.dashBoard.actors.ActorsResponse
 import com.krunal3kapadiya.popularmovies.data.model.*
+import com.krunal3kapadiya.popularmovies.data.model.tvDetail.TvDetailResponse
+import com.krunal3kapadiya.popularmovies.data.moviedetails.MovieDetailResponse
 import com.krunal3kapadiya.popularmovies.genres.GenresListResponse
 import io.reactivex.Observable
 import retrofit2.http.GET
@@ -31,7 +33,6 @@ import retrofit2.http.Query
  * @author <a href="https://github.com/krunal3kapadiya">krunal3kapadiya</a>
  */
 internal interface MovieApi {
-
 
     @GET("/authentication/token/new")
     fun createRequestToken(@Query("api_key") apiKey: String): Observable<RequestTokenResponse>
@@ -46,6 +47,11 @@ internal interface MovieApi {
     /*---
     Movies List
     ---*/
+
+    @GET("movie/{movie_id}")
+    fun getMovieDetails(@Path("movie_id") movie_id: Int,
+                        @Query("api_key") apiKey: String): Observable<MovieDetailResponse>
+
     @GET("movie/top_rated")
     fun getTopRatedMovies(@Query("page") page: Int, @Query("api_key") apiKey: String): Observable<MovieResponse>
 
@@ -74,6 +80,10 @@ internal interface MovieApi {
     /*---
     TV List
     ---*/
+    @GET("tv/{tv_id}")
+    fun tvDetails(@Path("tv_id") tv_id: Int,
+                  @Query("api_key") apiKey: String): Observable<TvDetailResponse>
+
     @GET("tv/on_the_air")
     fun tvOnAir(@Query("page") page: Int,
                 @Query("api_key") apiKey: String): Observable<TVResponse>

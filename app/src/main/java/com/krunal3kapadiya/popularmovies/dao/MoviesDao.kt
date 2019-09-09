@@ -19,7 +19,7 @@ interface MoviesDao {
      * insertion
      */
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insert(movies: Movies)
+    fun insert(data: Movies)
 
     /**
      * fetch all moviess
